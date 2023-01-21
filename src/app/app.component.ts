@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {uuid} from '../lib/uuid';
+import {uuid} from '../lib/util/uuid';
+import {Entity} from '../lib/entity/entity';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,8 @@ export class AppComponent {
   greeting = '';
 
   constructor() {
+    const entity = new Entity();
+    console.log(Entity.fromString(`${entity}`));
     this.greeting = uuid();
   }
 }
