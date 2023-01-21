@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {uuid} from '../lib/uuid';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,6 @@ export class AppComponent {
   greeting = '';
 
   constructor() {
-    this.greeting = 'hello world';
+    this.greeting = uuid();
   }
 }
