@@ -1,12 +1,7 @@
 import {Entity} from '../entity/entity';
-import {uuid} from '../util/lang';
 import {Location} from './location'
 
 export class SpatialEntity extends Entity {
-  constructor() {
-    super();
-  }
-
   get location() {
     return this.get('location');
   }
