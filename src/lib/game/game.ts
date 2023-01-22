@@ -1,5 +1,7 @@
 export class Game {
-  constructor() {
+  spaces = new Map();
 
+  constructor() {
+    // TODO
   }
 }

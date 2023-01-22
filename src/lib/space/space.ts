@@ -21,9 +21,16 @@ export class Space extends Entity {
     }
 
     this.set(entity.id, newKey);
+
+    // TODO: instead of a generic entity, i need something that can handle terrain
+    // change classes to "World" and "WorldChunk"?
+
     if (!this.has(newKey)) this.set(newKey, new Entity());
     this.get(newKey).set(entity.id, entity);
   }
+
+  // todo: really this should just be replaced with nearbyChunks
+  // todo: can add a generic method to entity that updates based on another entity
 
   search(entity: SpatialEntity) {
     const [x, y] = this.#sector(entity), result: Array<SpatialEntity> = [];

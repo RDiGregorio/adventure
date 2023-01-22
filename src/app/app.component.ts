@@ -13,15 +13,12 @@ export class AppComponent {
   output = '';
 
   constructor() {
-    //const game = new Game();
-    //const entities = [new SpatialEntity()];
-    //const space = new Space();
-    //entities[0].location = new Location(0, 0);
-    //entities[0].spaceId = space.id;
-    //this.output = `${entities[0].toArray()}`;
+    const game = new Game(), space = new Space();
+    game.spaces.set(space.id, space);
+
 
     const entities = [new SpatialEntity(), new SpatialEntity(), new SpatialEntity()];
-    const space = new Space();
+
     entities[0].location = new Location(0, 0);
     entities[0].spaceId = space.id;
     entities[1].location = new Location(99, 99);
