@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import {assert, isJsonPrimitive, uuid} from '../util/util';
 import {EntityEvent} from './entity-event';
-import {multiMapAdd, multiMapDelete} from '../util/multi-map';
 
 export class Entity extends Map {
   static #types = new Map().set('Entity', Entity);
@@ -42,7 +41,7 @@ export class Entity extends Map {
     return key;
   }
 
-  override clear() {
+  clear() {
     [...this.keys()].forEach(this.delete);
   }
 
@@ -63,7 +62,12 @@ export class Entity extends Map {
 
     if (this.get(key) !== value) {
       _.isUndefined(value) ? super.delete(key) : super.set(key, value);
-      if (value instanceof Entity) multiMapAdd(value.#containers, this, key);
+
+      if (value instanceof Entity) {
+        if (!value.#containers.has(this)) value.#containers.set(this, new Set());
+        value.#containers.get(this).add(key);
+      }
+
       this.dispatchEvent(new EntityEvent('set', [key], value));
     }
 
@@ -72,7 +76,11 @@ export class Entity extends Map {
 
   delete(key) {
     if (this.has(key)) {
-      if (this.get(key) instanceof Entity) multiMapDelete(this.get(key).#containers, this, key);
+      if (this.get(key) instanceof Entity) {
+        this.get(key).#containers.get(this)?.delete(key);
+        if (this.get(key).#containers.get(this)?.size === 0) this.get(key).#containers.delete(this);
+      }
+
       this.set(key, undefined);
       return true;
     }
@@ -81,13 +89,7 @@ export class Entity extends Map {
   }
 
   toArray() {
-    const result: Array<any> = [];
-
-    [...this.entries()].forEach(entry => {
-      if (!['id', 'type'].includes(entry[0])) result.push(entry[1]);
-    })
-
-    return result;
+    return [...this.entries()].filter(entry => !['id', 'type'].includes(entry[0])).map(entry => entry[1]);
   }
 
   toString() {

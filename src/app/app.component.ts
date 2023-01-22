@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {SpatialEntity} from '../lib/space/spatial-entity';
 import {Location} from '../lib/space/location';
 import {Space} from 'src/lib/space/space';
+import {Game} from 'src/lib/game/game';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,13 @@ export class AppComponent {
   output = '';
 
   constructor() {
+    //const game = new Game();
+    //const entities = [new SpatialEntity()];
+    //const space = new Space();
+    //entities[0].location = new Location(0, 0);
+    //entities[0].spaceId = space.id;
+    //this.output = `${entities[0].toArray()}`;
+
     const entities = [new SpatialEntity(), new SpatialEntity(), new SpatialEntity()];
     const space = new Space();
     entities[0].location = new Location(0, 0);

@@ -31,9 +31,7 @@ export class Space extends Entity {
     for (let i = -1; i <= 1; i++)
       for (let j = -1; j <= 1; j++) {
         const key = JSON.stringify([x + i, y + j]);
-
-        if (this.has(key))
-          this.toArray().filter(entity => entity instanceof SpatialEntity).forEach(entity => result.push(entity));
+        if (this.has(key)) result.push(...this.get(key).toArray());
       }
 
     return result;
