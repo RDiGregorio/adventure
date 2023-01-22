@@ -26,17 +26,14 @@ export class Space extends Entity {
   }
 
   search(entity: SpatialEntity) {
-    const [x, y] = this.#sector(entity);
-    const result: Array<SpatialEntity> = [];
+    const [x, y] = this.#sector(entity), result: Array<SpatialEntity> = [];
 
     for (let i = -1; i <= 1; i++)
       for (let j = -1; j <= 1; j++) {
         const key = JSON.stringify([x + i, y + j]);
 
         if (this.has(key))
-          [...this.get(key).values()]
-            .filter(entity => entity instanceof SpatialEntity)
-            .forEach(entity => result.push(entity));
+          this.toArray().filter(entity => entity instanceof SpatialEntity).forEach(entity => result.push(entity));
       }
 
     return result;

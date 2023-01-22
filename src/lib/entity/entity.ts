@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {assert, isJsonPrimitive, uuid} from '../util/lang';
+import {assert, isJsonPrimitive, uuid} from '../util/util';
 import {EntityEvent} from './entity-event';
 import {multiMapAdd, multiMapDelete} from '../util/multi-map';
 
@@ -78,6 +78,16 @@ export class Entity extends Map {
     }
 
     return false;
+  }
+
+  toArray() {
+    const result: Array<any> = [];
+
+    [...this.entries()].forEach(entry => {
+      if (!['id', 'type'].includes(entry[0])) result.push(entry[1]);
+    })
+
+    return result;
   }
 
   toString() {
