@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {uuid} from '../lib/util/lang';
-import {Entity} from '../lib/entity/entity';
+import {SpatialEntity} from '../lib/space/spatial-entity';
+import {Location} from '../lib/space/location';
+import { Space } from 'src/lib/space/space';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +10,14 @@ import {Entity} from '../lib/entity/entity';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  greeting = '';
+  output = '';
 
   constructor() {
-    const entity = new Entity();
-    console.log(Entity.fromString(`${entity}`));
-    this.greeting = uuid();
+    const entity = new SpatialEntity();
+    const space = new Space();
+    entity.location = new Location(0, 0);
+    entity.spaceId = space.id;
+    space.update(entity);
+    this.output = `${space}`;
   }
 }

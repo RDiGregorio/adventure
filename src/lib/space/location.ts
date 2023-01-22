@@ -1,7 +1,7 @@
 import {Entity} from '../entity/entity';
 
 export class Location extends Entity {
-  constructor(x = 0, y = 0) {
+  constructor(x, y) {
     super();
     this.set('x', x);
     this.set('y', y);
