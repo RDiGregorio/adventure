@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {uuid} from '../lib/util/uuid';
+import {uuid} from '../lib/util/lang';
 import {Entity} from '../lib/entity/entity';
 
 @Component({

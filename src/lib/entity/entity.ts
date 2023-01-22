@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
-import {uuid} from '../util/uuid';
-import {assert, isJsonPrimitive} from '../util/lang';
+import {assert, isJsonPrimitive, uuid} from '../util/lang';
 import {EntityEvent} from './entity-event';
 import {multiMapAdd, multiMapDelete} from '../util/multi-map';
 
