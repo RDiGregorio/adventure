@@ -62,7 +62,7 @@ export class Entity extends Map {
     assert(_.isUndefined(value) || isJsonPrimitive(value) || value instanceof Entity);
 
     if (this.get(key) !== value) {
-      super.set(key, value);
+      _.isUndefined(value) ? super.delete(key) : super.set(key, value);
       if (value instanceof Entity) multiMapAdd(value.#containers, this, key);
       this.dispatchEvent(new EntityEvent('set', [key], value));
     }

@@ -12,10 +12,13 @@ export class Space extends Entity {
 
     if (this.id !== entity.spaceId || oldKey !== newKey) {
       this.get(oldKey)?.delete(entity.id);
-      if (this.get(oldKey)?.size === 0) this.delete(oldKey);
+      if (this.get(oldKey)?.size === 2) this.delete(oldKey);
     }
 
-    if (this.id !== entity.spaceId) return;
+    if (this.id !== entity.spaceId) {
+      this.delete(entity.id);
+      return;
+    }
 
     this.set(entity.id, newKey);
     if (!this.has(newKey)) this.set(newKey, new Entity());

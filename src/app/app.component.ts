@@ -23,6 +23,8 @@ export class AppComponent {
     space.update(entities[0]);
     space.update(entities[1]);
     space.update(entities[2]);
+    entities[2].spaceId = '0';
+    space.update(entities[2]);
     console.log(space);
     this.output = `${space.search(entities[0]).length}`;
   }
