@@ -2,6 +2,11 @@ import {Entity} from '../entity/entity';
 import {SpatialEntity} from './spatial-entity';
 
 export class Space extends Entity {
+  #sector(entity: SpatialEntity) {
+    const x = entity?.location?.x ?? 0, y = entity?.location?.y ?? 0;
+    return [Math.floor(x / 100), Math.floor(y / 100)];
+  }
+
   update(entity: SpatialEntity) {
     const oldKey = this.get(entity.id), newKey = JSON.stringify(this.#sector(entity));
 
@@ -17,19 +22,18 @@ export class Space extends Entity {
     this.get(newKey).set(entity.id, entity);
   }
 
-  #sector(entity: SpatialEntity) {
-    const x = entity?.location?.x ?? 0, y = entity?.location?.x ?? 0;
-    return [Math.floor(x / 100), Math.floor(y / 100)];
-  }
-
   search(entity: SpatialEntity) {
     const [x, y] = this.#sector(entity);
     const result: Array<SpatialEntity> = [];
 
     for (let i = -1; i <= 1; i++)
       for (let j = -1; j <= 1; j++) {
-        const key = this.get(JSON.stringify([x + i, y + j]));
-        if (this.has(key)) [...this.get(key).values()].forEach(entity => result.push(entity));
+        const key = JSON.stringify([x + i, y + j]);
+
+        if (this.has(key))
+          [...this.get(key).values()]
+            .filter(entity => entity instanceof SpatialEntity)
+            .forEach(entity => result.push(entity));
       }
 
     return result;

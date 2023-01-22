@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
-import {uuid} from '../lib/util/lang';
 import {SpatialEntity} from '../lib/space/spatial-entity';
 import {Location} from '../lib/space/location';
-import { Space } from 'src/lib/space/space';
+import {Space} from 'src/lib/space/space';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +12,18 @@ export class AppComponent {
   output = '';
 
   constructor() {
-    const entity = new SpatialEntity();
+    const entities = [new SpatialEntity(), new SpatialEntity(), new SpatialEntity()];
     const space = new Space();
-    entity.location = new Location(0, 0);
-    entity.spaceId = space.id;
-    space.update(entity);
-    this.output = `${space}`;
+    entities[0].location = new Location(0, 0);
+    entities[0].spaceId = space.id;
+    entities[1].location = new Location(99, 99);
+    entities[1].spaceId = space.id;
+    entities[2].location = new Location(0, 200);
+    entities[2].spaceId = space.id;
+    space.update(entities[0]);
+    space.update(entities[1]);
+    space.update(entities[2]);
+    console.log(space);
+    this.output = `${space.search(entities[0]).length}`;
   }
 }
