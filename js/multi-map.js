@@ -22,7 +22,10 @@ class MultiMap extends Map {
      */
 
     delete(key, value) {
-        return super.has(key) && super.get(key).delete(value);
+        if (!super.has(key)) return false;
+        const result = super.get(key).delete(value);
+        if (super.get(key).size === 0) super.delete(key);
+        return result;
     }
 
     /**
