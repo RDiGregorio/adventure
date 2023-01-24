@@ -1,4 +1,4 @@
-class MultiMap extends Map {
+export class MultiMap extends Map {
     /**
      * @returns {number}
      */
