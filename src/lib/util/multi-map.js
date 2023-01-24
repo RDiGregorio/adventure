@@ -8,53 +8,63 @@ export class MultiMap extends Map {
     }
 
     /**
-     * @returns {Iterable<[string, *]>}
+     * @returns {Iterable<[*, *]>}
      */
 
     * [Symbol.iterator]() {
-        for (const key of super.keys()) for (const value of super.get(key)) yield [key, value];
+        for (const key of super.keys())
+            for (const value of super.get(key))
+                yield [key, value];
     }
 
     /**
-     * @param {string} key
+     * @param {*} key
      * @param {*} value
      * @returns {boolean}
      */
 
     delete(key, value) {
         if (!super.has(key)) return false;
+        if (arguments.length < 2) return super.delete(key);
         const result = super.get(key).delete(value);
         if (super.get(key).size === 0) super.delete(key);
         return result;
     }
 
     /**
-     * @returns {Iterable<[string, *]>}
+     * @returns {Iterable<[*, *]>}
      */
 
     * entries() {
-        for (const key of super.keys()) for (const value of super.get(key)) yield [key, value];
+        for (const key of super.keys())
+            for (const value of super.get(key))
+                yield [key, value];
     }
 
     /**
-     * @param {function(*, string, MultiMap)} callback
+     * @param {function(*, *, MultiMap)} callback
+     * @param {*} self
      */
 
-    forEach(callback) {
-        for (const key of super.keys()) for (const value of super.get(key)) callback(value, key, this);
+    forEach(callback, self = this) {
+        for (const key of super.keys())
+            for (const value of super.get(key))
+                callback.apply(self, [value, key, this]);
     }
 
     /**
-     * @param {string} key
+     * @param {*} key
      * @returns {Iterable<*>}
      */
 
     * get(key) {
-        if (super.has(key)) for (const value of super.get(key)) yield value;
+        if (super.has(key))
+            for (const value of super.get(key))
+                yield value;
     }
 
     /**
-     * @param {string} key
+     * @param {*} key
      * @param {*} value
      * @returns {MultiMap}
      */
@@ -70,6 +80,8 @@ export class MultiMap extends Map {
      */
 
     * values() {
-        for (const key of super.keys()) for (const value of super.get(key)) yield value;
+        for (const key of super.keys())
+            for (const value of super.get(key))
+                yield value;
     }
 }
