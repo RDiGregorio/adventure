@@ -45,6 +45,14 @@ export class GameObject extends Map {
     }
 
     /**
+     * @param {string[]} keys
+     */
+
+    getPath(keys) {
+        return keys.reduce((result, key) => result.get(key), this);
+    }
+
+    /**
      * @param {string} key
      */
 
