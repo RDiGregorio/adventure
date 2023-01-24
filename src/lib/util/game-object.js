@@ -1,6 +1,6 @@
 import {MultiMap} from './multi-map.js';
-import {isJsonPrimitive, uuid} from './util.js';
 import {GameEvent} from './game-event.js';
+import {uuid} from './uuid.js';
 
 export class GameObject extends Map {
     #eventListeners = new Map();
@@ -38,10 +38,10 @@ export class GameObject extends Map {
      */
 
     dispatchEvent(event) {
+        this.#eventListeners.forEach(callback => callback(event));
+
         for (const [parent, key] of this.#parentKeys)
             parent.dispatchEvent(new GameEvent(event.type, [key, ...event.path], event.value));
-
-        this.#eventListeners.forEach(callback => callback(event));
     }
 
     /**
@@ -59,7 +59,7 @@ export class GameObject extends Map {
 
     set(key, value) {
         if (this.get(key) === value) return this;
-        if (this.get(key) instanceof GameObject) this.get(key).#parents.delete(this, key);
+        if (this.get(key) instanceof GameObject) this.get(key).#parentKeys.delete(this, key);
         value === undefined ? super.delete(key) : super.set(key, value);
         if (value instanceof GameObject) value.#parentKeys.set(this, key);
         this.dispatchEvent(new GameEvent('update', [key], value));
