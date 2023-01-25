@@ -1,6 +1,9 @@
 import _ from 'lodash';
 
+const replacers = [], revivers = [];
+
 /**
+ * Returns true if `value` is a JSON primitive.
  * @param {*} value
  * @return {boolean}
  */
@@ -10,6 +13,7 @@ export function isJsonPrimitive(value) {
 }
 
 /**
+ * Returns true if `value` is an array of JSON primitives.
  * @param {*} value
  * @return {boolean}
  */
@@ -18,32 +22,42 @@ export function isJsonPrimitiveArray(value) {
     return Array.isArray(value) && value.every(isJsonPrimitive);
 }
 
-export function registerJsonReplacer(type, callback) {
+/**
+ * Registers `callback` for `jsonReplace`.
+ * @param {function(string, *): *} callback
+ */
 
-}
-
-export function registerJsonReviver(type, callback) {
-
+export function registerJsonReplacer(callback) {
+    replacers.push(callback);
 }
 
 /**
+ * Registers `callback` for `jsonRevive`.
+ * @param {function(string, *): *} callback
+ */
+
+export function registerJsonReviver(callback) {
+    revivers.push(callback);
+}
+
+/**
+ * A replacer for `JSON.stringify`.
  * @param {string} key
  * @param {*} value
  * @return {*}
  */
 
 export function jsonReplace(key, value) {
-    // TODO: need to be able to register replacers for various classes
-
-    return null;
+    return revivers.reduce((result, callback) => callback(key, result), value);
 }
 
 /**
+ * A reviver for `JSON.parse`.
  * @param {string} key
  * @param {*} value
  * @return {*}
  */
 
 export function jsonRevive(key, value) {
-    return null;
+    return revivers.reduce((result, callback) => callback(key, result), value);
 }
