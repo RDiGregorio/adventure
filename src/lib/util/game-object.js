@@ -2,40 +2,9 @@ import _ from 'lodash';
 import {MultiMap} from './multi-map.js';
 import {GameEvent} from './game-event.js';
 import {uuid} from './uuid.js';
-
-import {
-    isJsonPrimitive,
-    isJsonPrimitiveArray,
-    jsonReplace,
-    registerJsonReplacer,
-    registerJsonReviver
-} from './json.js';
+import {isJsonPrimitive, isJsonPrimitiveArray, jsonReplace} from './json.js';
 
 export class GameObject extends Map {
-    static {
-        registerJsonReplacer((key, value) => {
-            if (value instanceof GameObject) {
-                const data = Object.fromEntries(value.entries());
-                return {class: value.constructor.name, id: value.id, data: data};
-            }
-
-            return value;
-        });
-
-        registerJsonReviver((key, value) => {
-            if (value?.hasOwnProperty('class')) {
-                if (!GameObject.#classes.has(value.class)) throw new Error(`unregistered class: ${value.class}`);
-                const result = new (GameObject.#classes.get(value.class));
-                result.id = value.id;
-                Object.entries(value.data).forEach(entry => result.set(...entry));
-                return result;
-            }
-
-            return value;
-        });
-    }
-
-    static #classes = new Map();
     #eventListeners = new Map();
     #id = uuid();
     #parentKeys = new MultiMap();
@@ -59,14 +28,6 @@ export class GameObject extends Map {
     static #isValidArgument(value) {
         if (value === undefined || isJsonPrimitive(value) || isJsonPrimitiveArray(value)) return true;
         return value instanceof GameObject;
-    }
-
-    /**
-     * @param {Class} type
-     */
-
-    static registerClass(type) {
-        GameObject.#classes.set(type.name, type);
     }
 
     /**

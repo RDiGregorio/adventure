@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import {newInstance} from './instance.js';
+import {GameObject} from './game-object.js';
 
 const replacers = [], revivers = [];
 
@@ -61,3 +63,23 @@ export function jsonReplace(key, value) {
 export function jsonRevive(key, value) {
     return revivers.reduce((result, callback) => callback(key, result), value);
 }
+
+registerJsonReplacer((key, value) => {
+    if (value instanceof GameObject) {
+        const data = Object.fromEntries(value.entries());
+        return {class: value.constructor.name, id: value.id, data: data};
+    }
+
+    return value;
+});
+
+registerJsonReviver((key, value) => {
+    if (value?.hasOwnProperty('class')) {
+        const result = newInstance(value.class);
+        result.id = value.id;
+        Object.entries(value.data).forEach(entry => result.set(...entry));
+        return result;
+    }
+
+    return value;
+});
