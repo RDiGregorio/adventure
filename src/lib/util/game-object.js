@@ -64,7 +64,6 @@ export class GameObject extends Map {
         this.keys().forEach(this.delete);
     }
 
-
     /**
      * @param {string} key
      * @return {boolean}
