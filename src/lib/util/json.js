@@ -74,7 +74,7 @@ registerJsonReplacer((key, value) => {
 });
 
 registerJsonReviver((key, value) => {
-    if (value?.hasOwnProperty('class')) {
+    if (value?.hasOwnProperty('class') && value?.hasOwnProperty('id')) {
         const result = newInstance(value.class);
         result.id = value.id;
         Object.entries(value.data).forEach(entry => result.set(...entry));
