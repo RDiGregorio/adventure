@@ -1,9 +1,21 @@
 import {GameObject} from './game-object.js';
-import {GameEvent} from "./game-event.js";
 
 class World extends GameObject {
-    chunk(x, y) {
-        return this.get();
+    constructor() {
+        super();
+        //this.set('sections', new GameObject());
+
+        this.addEventListener(event => {
+            if (event.type !== 'update') return;
+
+            if (event.pathMatches(['*', '*', 'world']) || event.pathMatches(['*', '*', 'location'])) {
+                console.log([event.path, event.value]);
+            }
+        });
+    }
+
+    static getKey(world, x, y) {
+        return JSON.stringify([world, Math.floor(x / Chunk.size), Math.floor(y / Chunk.size)]);
     }
 }
 
@@ -68,9 +80,18 @@ class Entity extends GameObject {
      */
 
     move(world, x, y) {
-        const oldKey = Chunk.getKey(this.world, this.x, this.y), newKey = Chunk.getKey(world, x, y);
         this.set('world', world);
         if (x !== this.x || y !== this.y) this.set('location', [x, y]);
-        if (oldKey !== newKey) this.dispatchEvent(new GameEvent('chunk', [], newKey));
+
+        //const oldKey = Chunk.getKey(this.world, this.x, this.y), newKey = Chunk.getKey(world, x, y);
+        //this.set('world', world);
+        //if (x !== this.x || y !== this.y) this.set('location', [x, y]);
+        //if (oldKey !== newKey) this.dispatchEvent(new GameEvent('chunk', [], newKey));
     }
 }
+
+const world = new World();
+const entity = new Entity();
+world.set('a', new GameObject());
+world.get('a').set(entity.id, entity);
+entity.move(world.id, 100, 100);

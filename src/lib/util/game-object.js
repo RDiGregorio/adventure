@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {MultiMap} from './multi-map.js';
 import {GameEvent} from './game-event.js';
 import {uuid} from './uuid.js';
@@ -15,6 +16,11 @@ export class GameObject extends Map {
 
     get id() {
         return this.#id;
+    }
+
+    static #isValidArgument(value) {
+        if (value === undefined || isJsonPrimitive(value) || isJsonPrimitiveArray(value)) return true;
+        return value instanceof GameObject;
     }
 
     /**
@@ -42,11 +48,6 @@ export class GameObject extends Map {
 
     static registerClass(value) {
         GameObject.#classes.set(value.constructor.name, value);
-    }
-
-    static #validArgument(value) {
-        if (value === undefined || isJsonPrimitive(value) || isJsonPrimitiveArray(value)) return true;
-        return value instanceof GameObject;
     }
 
     /**
@@ -108,7 +109,7 @@ export class GameObject extends Map {
      */
 
     set(key, value) {
-        if (!GameObject.#validArgument(value)) throw new Error(`invalid argument: ${value}`);
+        if (!GameObject.#isValidArgument(value)) throw new Error(`invalid argument: ${value}`);
 
         if (isJsonPrimitiveArray(value)) {
             if (_.isEqual(this.get(key), value)) return this;

@@ -38,4 +38,23 @@ export class GameEvent {
     get value() {
         return this.#value;
     }
+
+    /**
+     * @param {string[]} array
+     * @return {boolean}
+     */
+
+    pathMatches(array) {
+        if (this.#path.length !== array.length) return false;
+        return this.#path.every((value, index) => array[index] === value || array[index] === '*');
+    }
+
+    /**
+     * @return {string}
+     */
+
+    toString() {
+        // TODO: need to be able to encode game objects
+        return super.toString();
+    }
 }
