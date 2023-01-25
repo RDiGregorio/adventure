@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {MultiMap} from './multi-map.js';
 import {GameEvent} from './game-event.js';
 import {uuid} from './uuid.js';
-import {isJsonPrimitive, isJsonPrimitiveArray, jsonReplace} from './json.js';
+import {isJsonPrimitive, isJsonPrimitiveArray} from './json.js';
 import {newInstance} from "./instance.js";
 
 export class GameObject extends Map {
@@ -135,13 +135,5 @@ export class GameObject extends Map {
         if (value instanceof GameObject) value.#parentKeys.set(this, key);
         this.dispatchEvent(new GameEvent('update', [key], value));
         return this;
-    }
-
-    /**
-     * @return {string}
-     */
-
-    toString() {
-        return JSON.stringify(this, jsonReplace);
     }
 }

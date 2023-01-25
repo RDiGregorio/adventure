@@ -49,7 +49,7 @@ export function registerJsonReviver(callback) {
  * @return {*}
  */
 
-export function jsonReplace(key, value) {
+export function jsonReplacer(key, value) {
     return replacers.reduce((result, callback) => callback(key, result), value);
 }
 
@@ -60,6 +60,6 @@ export function jsonReplace(key, value) {
  * @return {*}
  */
 
-export function jsonRevive(key, value) {
+export function jsonReviver(key, value) {
     return revivers.reduce((result, callback) => callback(key, result), value);
 }
