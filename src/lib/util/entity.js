@@ -1,6 +1,12 @@
 import {GameObject} from './game-object.js';
 import {GameEvent} from "./game-event.js";
 
+class World extends GameObject {
+    chunk(x, y) {
+        return this.get();
+    }
+}
+
 class Chunk extends GameObject {
     static size = 100;
 
