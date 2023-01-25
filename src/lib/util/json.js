@@ -63,23 +63,3 @@ export function jsonReplace(key, value) {
 export function jsonRevive(key, value) {
     return revivers.reduce((result, callback) => callback(key, result), value);
 }
-
-registerJsonReplacer((key, value) => {
-    if (value instanceof GameObject) {
-        const data = Object.fromEntries(value.entries());
-        return {class: value.constructor.name, id: value.id, data: data};
-    }
-
-    return value;
-});
-
-registerJsonReviver((key, value) => {
-    if (value?.hasOwnProperty('class') && value?.hasOwnProperty('id')) {
-        const result = newInstance(value.class);
-        result.id = value.id;
-        Object.entries(value.data).forEach(entry => result.set(...entry));
-        return result;
-    }
-
-    return value;
-});

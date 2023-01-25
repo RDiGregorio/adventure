@@ -3,6 +3,7 @@ import {MultiMap} from './multi-map.js';
 import {GameEvent} from './game-event.js';
 import {uuid} from './uuid.js';
 import {isJsonPrimitive, isJsonPrimitiveArray, jsonReplace} from './json.js';
+import {newInstance} from "./instance.js";
 
 export class GameObject extends Map {
     #eventListeners = new Map();
@@ -23,6 +24,38 @@ export class GameObject extends Map {
 
     set id(string) {
         this.#id = string;
+    }
+
+    /**
+     * @param {string} key
+     * @param {*} value
+     * @return {*}
+     */
+
+    static jsonReplacer(key, value) {
+        if (value instanceof GameObject) {
+            const data = Object.fromEntries(value.entries());
+            return {class: value.constructor.name, id: value.id, data: data};
+        }
+
+        return value;
+    }
+
+    /**
+     * @param {string} key
+     * @param {*} value
+     * @return {*}
+     */
+
+    static jsonReviver(key, value) {
+        if (value?.hasOwnProperty('class') && value?.hasOwnProperty('id') && value?.hasOwnProperty('data')) {
+            const result = newInstance(value.class);
+            result.id = value.id;
+            Object.entries(value.data).forEach(entry => result.set(...entry));
+            return result;
+        }
+
+        return value;
     }
 
     static #isValidArgument(value) {
