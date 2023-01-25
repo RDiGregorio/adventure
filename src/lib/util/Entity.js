@@ -2,11 +2,15 @@ import {GameObject} from './game-object.js';
 import {GameEvent} from "./game-event.js";
 
 class Chunk extends GameObject {
+    static size = 100;
+
     constructor(world, x, y) {
         super();
         const key = Chunk.getKey(world, x, y);
 
         this.addEventListener(event => {
+            // TODO: this doesn't really work. Instead there just needs to be a 'world' object
+
             if (event.type !== 'chunk') return;
             const entity = this.getPath(event.path);
             key === event.value ? this.set(entity.id, entity) : this.delete(entity.id);
@@ -21,7 +25,7 @@ class Chunk extends GameObject {
      */
 
     static getKey(world, x, y) {
-        return JSON.stringify([world, Math.floor(x / 100), Math.floor(y / 100)]);
+        return JSON.stringify([world, Math.floor(x / Chunk.size), Math.floor(y / Chunk.size)]);
     }
 
 }
