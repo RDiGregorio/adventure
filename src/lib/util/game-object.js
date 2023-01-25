@@ -2,10 +2,40 @@ import _ from 'lodash';
 import {MultiMap} from './multi-map.js';
 import {GameEvent} from './game-event.js';
 import {uuid} from './uuid.js';
-import {isJsonPrimitive, isJsonPrimitiveArray} from './json.js';
+
+import {
+    isJsonPrimitive,
+    isJsonPrimitiveArray,
+    jsonReplace,
+    registerJsonReplacer,
+    registerJsonReviver
+} from './json.js';
 
 export class GameObject extends Map {
-    static #classes = new Map().set('GameObject', GameObject);
+    static {
+        registerJsonReplacer((key, value) => {
+            if (value instanceof GameObject) {
+                const data = Object.fromEntries(value.entries());
+                return {class: value.constructor.name, id: value.id, data: data};
+            }
+
+            return value;
+        });
+
+        registerJsonReviver((key, value) => {
+            if (value?.hasOwnProperty('class')) {
+                if (!GameObject.#classes.has(value.class)) throw new Error(`unregistered class: ${value.class}`);
+                const result = new (GameObject.#classes.get(value.class));
+                result.id = value.id;
+                Object.entries(value.data).forEach(entry => result.set(...entry));
+                return result;
+            }
+
+            return value;
+        });
+    }
+
+    static #classes = new Map();
     #eventListeners = new Map();
     #id = uuid();
     #parentKeys = new MultiMap();
@@ -32,30 +62,11 @@ export class GameObject extends Map {
     }
 
     /**
-     * @param {string} string
-     * @return {GameObject}
-     */
-
-    static fromString(string) {
-        return JSON.parse(string, (key, value) => {
-            if (value?.hasOwnProperty('class')) {
-                if (!GameObject.#classes.has(value.class)) throw new Error(`unregistered class: ${value.class}`);
-                const result = new (GameObject.#classes.get(value.class));
-                result.id = value.id;
-                Object.entries(value.data).forEach(entry => result.set(...entry));
-                return result;
-            }
-
-            return value;
-        });
-    }
-
-    /**
      * @param {Class} type
      */
 
     static registerClass(type) {
-        GameObject.#classes.set(type.constructor.name, type);
+        GameObject.#classes.set(type.name, type);
     }
 
     /**
@@ -137,13 +148,6 @@ export class GameObject extends Map {
      */
 
     toString() {
-        return JSON.stringify(this, (key, value) => {
-            if (value instanceof GameObject) {
-                const data = Object.fromEntries(this.entries());
-                return {class: this.constructor.name, id: this.id, data: data};
-            }
-
-            return value;
-        });
+        return JSON.stringify(this, jsonReplace);
     }
 }

@@ -48,7 +48,7 @@ export function registerJsonReviver(callback) {
  */
 
 export function jsonReplace(key, value) {
-    return revivers.reduce((result, callback) => callback(key, result), value);
+    return replacers.reduce((result, callback) => callback(key, result), value);
 }
 
 /**
