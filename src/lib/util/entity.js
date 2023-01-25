@@ -1,5 +1,7 @@
 import {GameObject} from './game-object.js';
 
+// todo: terrain chunks are also entities, so "world chunk" objects don't need to exist
+
 class World extends GameObject {
     constructor() {
         super();
