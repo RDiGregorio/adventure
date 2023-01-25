@@ -1,6 +1,6 @@
 export class GameEvent {
-    #path;
     #type;
+    #path;
     #value;
 
     /**
@@ -40,6 +40,28 @@ export class GameEvent {
     }
 
     /**
+     * @param {string} key
+     * @param {*} value
+     * @return {*}
+     */
+
+    static jsonReplacer(key, value) {
+        return value instanceof GameEvent
+            ? {class: value.constructor.name, type: value.type, path: value.path, value: value.value}
+            : value;
+    }
+
+    /**
+     * @param {string} key
+     * @param {*} value
+     * @return {*}
+     */
+
+    static jsonReviver(key, value) {
+        return value?.class === 'GameEvent' ? new GameEvent(value.type, value.path, value.value) : value;
+    }
+
+    /**
      * @param {string[]} array
      * @return {boolean}
      */
@@ -47,14 +69,5 @@ export class GameEvent {
     pathMatches(array) {
         if (this.#path.length !== array.length) return false;
         return this.#path.every((value, index) => array[index] === value || array[index] === '*');
-    }
-
-    /**
-     * @return {string}
-     */
-
-    toString() {
-        // TODO: need to be able to encode game objects
-        return super.toString();
     }
 }
