@@ -1,6 +1,6 @@
 import RTree from 'rtree';
 
-class Space {
+export class Space {
     #rTree = new RTree();
     #map = new Map();
 
