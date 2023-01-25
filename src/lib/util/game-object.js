@@ -51,11 +51,11 @@ export class GameObject extends Map {
     }
 
     /**
-     * @param {Class} value
+     * @param {Class} type
      */
 
-    static registerClass(value) {
-        GameObject.#classes.set(value.constructor.name, value);
+    static registerClass(type) {
+        GameObject.#classes.set(type.constructor.name, type);
     }
 
     /**
