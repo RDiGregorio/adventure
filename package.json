@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "rtree": "^1.4.2"
   }
 }
