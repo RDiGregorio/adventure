@@ -1,6 +1,6 @@
-import {GameObject} from "./lib/util/game-object.js";
-import {jsonRevive} from "./lib/util/json.js";
-import {registerClass} from "./lib/util/instance.js";
+import {GameObject} from './lib/util/game-object.js';
+import {jsonRevive} from './lib/util/json.js';
+import {registerClass} from './lib/util/instance.js';
 
 registerClass(GameObject);
 let object = new GameObject();
