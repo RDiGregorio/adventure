@@ -8,6 +8,14 @@ class World extends GameObject {
         this.addEventListener(event => {
             if (event.type !== 'update') return;
 
+            if (event.pathMatches(['*', '*', 'world'])) {
+                if(event.value === this.id) {
+                    // TODO
+                }
+
+                // return;
+            }
+
             if (event.pathMatches(['*', '*', 'world']) || event.pathMatches(['*', '*', 'location'])) {
                 console.log([event.path, event.value]);
             }

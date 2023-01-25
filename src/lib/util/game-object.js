@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {MultiMap} from './multi-map.js';
 import {GameEvent} from './game-event.js';
 import {uuid} from './uuid.js';
-import {isJsonPrimitive, isJsonPrimitiveArray} from './util.js';
+import {isJsonPrimitive, isJsonPrimitiveArray} from './json.js';
 
 export class GameObject extends Map {
     static #classes = new Map().set('GameObject', GameObject);
@@ -16,6 +16,14 @@ export class GameObject extends Map {
 
     get id() {
         return this.#id;
+    }
+
+    /**
+     * @param {string} string
+     */
+
+    set id(string) {
+        this.#id = string;
     }
 
     static #isValidArgument(value) {
@@ -33,7 +41,7 @@ export class GameObject extends Map {
             if (value?.hasOwnProperty('class')) {
                 if (!GameObject.#classes.has(value.class)) throw new Error(`unregistered class: ${value.class}`);
                 const result = new (GameObject.#classes.get(value.class));
-                result.#id = value.id;
+                result.id = value.id;
                 Object.entries(value.data).forEach(entry => result.set(...entry));
                 return result;
             }
