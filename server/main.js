@@ -1,5 +1,5 @@
 import {global} from 'shared/src/util/global.js';
-import {Storage} from 'shared/src/util/storage.js';
+import {ServerStorage} from './src/server-storage.js';
 
-global.storage = new Storage();
+global.storage = new ServerStorage();
 console.log(global.storage);
