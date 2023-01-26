@@ -1,6 +1,4 @@
 import _ from 'lodash';
-import {newInstance} from './instance.js';
-import {GameObject} from './game-object.js';
 
 const replacers = [], revivers = [];
 
