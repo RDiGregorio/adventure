@@ -50,11 +50,20 @@ export class World {
         await this.load(x, y, callback);
     }
 
+    /**
+     * @param {string} type
+     * @param {number} x
+     * @param {number} y
+     * @param {number} width
+     * @param {number} height
+     * @return {Entity[]}
+     */
+
     search(type, x, y, width, height) {
         return this.#space(type).search(x, y, width, height);
     }
 
     async unload(x, y) {
-        //
+        // TODO
     }
 }
