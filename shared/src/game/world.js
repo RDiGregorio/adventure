@@ -1,6 +1,5 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {jsonReplacer} from '../util/json.js';
 
 export class World {
     static #size = 100;
@@ -60,9 +59,6 @@ export class World {
     }
 
     async save(x, y) {
-        // todo: what if a load happens right after a save?
-        // i need some locking mechanism
-
         const key = this.#storageKey(x, y);
 
         if (this.#loaded.delete(key)) {
