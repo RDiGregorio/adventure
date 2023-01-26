@@ -1,4 +1,7 @@
 import './app.css';
+import {GameObject} from 'server/src/game-object';
+
+console.log(GameObject);
 
 export default function App() {
     return (
