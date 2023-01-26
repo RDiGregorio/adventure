@@ -1,64 +1,14 @@
 import {GameObject} from './game-object.js';
 
-// todo: terrain chunks are also entities, so "world chunk" objects don't need to exist
-
-class World extends GameObject {
-    constructor() {
-        super();
-        //this.set('sections', new GameObject());
-
-        this.addEventListener(event => {
-            if (event.type !== 'update') return;
-
-            if (event.pathMatches(['*', '*', 'world'])) {
-                if(event.value === this.id) {
-                    // TODO
-                }
-
-                // return;
-            }
-
-            if (event.pathMatches(['*', '*', 'world']) || event.pathMatches(['*', '*', 'location'])) {
-                console.log([event.path, event.value]);
-            }
-        });
-    }
-
-    static getKey(world, x, y) {
-        return JSON.stringify([world, Math.floor(x / Chunk.size), Math.floor(y / Chunk.size)]);
-    }
-}
-
-class Chunk extends GameObject {
-    static size = 100;
-
-    constructor(world, x, y) {
-        super();
-        const key = Chunk.getKey(world, x, y);
-
-        this.addEventListener(event => {
-            // TODO: this doesn't really work. Instead there just needs to be a 'world' object
-
-            if (event.type !== 'chunk') return;
-            const entity = this.getPath(event.path);
-            key === event.value ? this.set(entity.id, entity) : this.delete(entity.id);
-        });
-    }
-
+export class Entity extends GameObject {
     /**
-     * @param {string} world
-     * @param {number} x
-     * @param {number} y
      * @return {string}
      */
 
-    static getKey(world, x, y) {
-        return JSON.stringify([world, Math.floor(x / Chunk.size), Math.floor(y / Chunk.size)]);
+    get type() {
+        return undefined;
     }
 
-}
-
-class Entity extends GameObject {
     /**
      * @return {string}
      */
@@ -99,9 +49,3 @@ class Entity extends GameObject {
         //if (oldKey !== newKey) this.dispatchEvent(new GameEvent('chunk', [], newKey));
     }
 }
-
-const world = new World();
-const entity = new Entity();
-world.set('a', new GameObject());
-world.get('a').set(entity.id, entity);
-entity.move(world.id, 100, 100);
