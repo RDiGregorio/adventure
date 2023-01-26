@@ -1,31 +1,34 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {global} from '../util/global.js';
 import {jsonReplacer} from '../util/json.js';
 
-// TODO: for this, we really need a save manager first
-// there will be no "WorldChunk" object as terrain will be stored as entities
-// this class mainly revolves around saving/loading entities
-// TODO: this needs a search function next (that also takes in type)
-
 export class World {
-    #keys = new Set();
+    static #size = 100;
+    static #worlds = new Map();
+    #loaded = new Set();
     #spaces = new Map();
     #name;
-    #size;
+    #storage;
 
-    constructor(name, size = 100) {
+    /**
+     * @param {string} name
+     * @param {Class} storage
+     */
+
+    constructor(name, storage = Storage) {
+        if (World.#worlds.has(name)) return World.#worlds.get(name);
+        World.#worlds.set(name, this);
         this.#name = name;
-        this.#size = size;
-    }
-
-    #key(x, y) {
-        return `${this.#name}.${x}.${y}`;
+        this.#storage = storage;
     }
 
     #space(type) {
         if (!this.#spaces.has(type)) this.#spaces.set(type, new Space());
         return this.#spaces.get(type);
+    }
+
+    #storageKey(x, y) {
+        return `world/${this.#name} ${x} ${y}`;
     }
 
     /**
@@ -36,18 +39,11 @@ export class World {
      */
 
     async load(x, y, callback) {
-        const key = this.#key(x, y);
-        if (!this.#keys.add(key)) return;
+        const key = this.#storageKey(x, y);
 
-        if (await global.storage.exists(key)) {
-            for (const entity of await global.storage.load(key))
+        if (this.#loaded.add(key) && await this.#storage.exists(key))
+            for (const entity of await this.#storage.load(key))
                 this.#space(entity.type).add(entity, x, y);
-
-            return;
-        }
-
-        await global.storage.save(key, JSON.stringify(await callback(x, y), jsonReplacer));
-        await this.load(x, y, callback);
     }
 
     /**
@@ -63,7 +59,19 @@ export class World {
         return this.#space(type).search(x, y, width, height);
     }
 
-    async unload(x, y) {
-        // TODO
+    async save(x, y) {
+        // todo: what if a load happens right after a save?
+        // i need some locking mechanism
+
+        const key = this.#storageKey(x, y);
+
+        if (this.#loaded.delete(key)) {
+            const entities = [];
+
+            for (const space of this.#spaces.values())
+                entities.push(...space.search(x, y, World.#size, World.#size));
+
+            await this.#storage.save(key, entities);
+        }
     }
 }

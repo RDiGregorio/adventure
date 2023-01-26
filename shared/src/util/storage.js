@@ -1,15 +1,15 @@
 import {jsonReplacer, jsonReviver} from './json.js';
 
-const storage = new Map();
-
 export class Storage {
+    static #map = new Map();
+
     /**
      * @param {string} key
      * @return {Promise<boolean>}
      */
 
-    async exists(key) {
-        return storage.has(key);
+    static async exists(key) {
+        return this.#map.has(key);
     }
 
     /**
@@ -17,8 +17,8 @@ export class Storage {
      * @return {Promise<*>}
      */
 
-    async load(key) {
-        return JSON.parse(storage.get(key), jsonReviver);
+    static async load(key) {
+        return JSON.parse(this.#map.get(key), jsonReviver);
     }
 
     /**
@@ -27,7 +27,7 @@ export class Storage {
      * @return {Promise<void>}
      */
 
-    async save(key, value) {
-        storage.set(key, JSON.stringify(value, jsonReplacer));
+    static async save(key, value) {
+        this.#map.set(key, JSON.stringify(value, jsonReplacer));
     }
 }
