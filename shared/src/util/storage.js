@@ -5,7 +5,7 @@ const storage = new Map();
 export class Storage {
     /**
      * @param {string} key
-     * @return {boolean}
+     * @return {Promise<boolean>}
      */
 
     async exists(key) {
@@ -14,7 +14,7 @@ export class Storage {
 
     /**
      * @param {string} key
-     * @return {*}
+     * @return {Promise<*>}
      */
 
     async load(key) {
@@ -24,6 +24,7 @@ export class Storage {
     /**
      * @param {string} key
      * @param {*} value
+     * @return {Promise<void>}
      */
 
     async save(key, value) {

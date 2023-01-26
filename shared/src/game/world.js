@@ -1,38 +1,48 @@
-import {Space} from './space.js';
+import {Space} from '../util/space.js';
+import {global} from '../util/global.js';
+import {jsonReplacer} from "../util/json.js";
 
 // TODO: for this, we really need a save manager first
+// there will be no "WorldChunk" object as terrain will be stored as entities
+// this class mainly revolves around saving/loading entities
 
-class World {
-    #callback;
+export class World {
+    #keys = new Set();
     #space = new Space();
+    #name;
+
+    constructor(name) {
+        this.#name = name;
+    }
+
+    #key(x, y) {
+        return `${this.#name}.${x}.${y}`;
+    }
 
     /**
-     * @param {function(number, number): WorldChunk} callback
+     * @param {number} x
+     * @param {number} y
+     * @param {function(number, number): Promise<Entity[]>} callback
+     * @return {Promise<void>}
      */
 
-    constructor(callback) {
-        this.#callback = callback;
+    async load(x, y, callback) {
+        const key = this.#key(x, y);
+        if (!this.#keys.add(key)) return;
+
+        if (await global.storage.exists(key)) {
+            for (const entity of await global.storage.load(key)) {
+                // TODO: add all
+            }
+
+            return;
+        }
+
+        await global.storage.save(key, JSON.stringify(await callback(x, y), jsonReplacer));
+        await this.load(x, y, callback);
     }
 
-    // todo: multiple spaces for different types of entities?
-
-    getChunk(x, y) {
-
-    }
-
-    #loadChunk(x, y) {
-
-    }
-
-    saveChunk(x, y) {
+    async unload(x, y) {
         //
-    }
-}
-
-class WorldChunk {
-    #world;
-
-    constructor(world) {
-        this.#world = world;
     }
 }
