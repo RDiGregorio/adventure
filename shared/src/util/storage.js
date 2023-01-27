@@ -1,4 +1,3 @@
-import {jsonReplacer, jsonReviver} from './json.js';
 import {Queue} from './queue.js';
 
 const map = new Map();
@@ -36,17 +35,23 @@ export class Storage {
     #exists;
     #load;
     #save;
+    #reviver;
+    #replacer;
 
     /**
      * @param {function(string): Promise<boolean>} exists
      * @param {function(string): Promise<*>} load
      * @param {function(string, *): Promise<void>} save
+     * @param {function(string, *): *} reviver
+     * @param {function(string, *): *} replacer
      */
 
-    constructor(exists, load, save) {
+    constructor(exists, load, save, reviver, replacer) {
         this.#exists = exists;
         this.#load = load;
         this.#save = save;
+        this.#reviver = reviver;
+        this.#replacer = replacer;
     }
 
     /**
@@ -64,7 +69,7 @@ export class Storage {
      */
 
     load(key) {
-        return this.#queue.add(() => JSON.parse(this.#load(key), jsonReviver));
+        return this.#queue.add(() => JSON.parse(this.#load(key), this.#reviver));
     }
 
     /**
@@ -74,6 +79,6 @@ export class Storage {
      */
 
     save(key, value) {
-        return this.#queue.add(() => this.#save(key, JSON.stringify(value, jsonReplacer)));
+        return this.#queue.add(() => this.#save(key, JSON.stringify(value, this.#replacer)));
     }
 }

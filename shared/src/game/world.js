@@ -1,11 +1,10 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {Storage} from '../util/storage.js';
-
-// todo: need to create a set of "map storage" functions for default use
+import {mockExists, mockLoad, mockSave, Storage} from '../util/storage.js';
 
 export class World {
     static #worlds = new Map();
+    static storage = new Storage(mockExists, mockLoad, mockSave);
     #space = new Space(entity => entity.id);
 
     /**
