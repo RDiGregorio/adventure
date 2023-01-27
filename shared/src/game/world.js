@@ -2,12 +2,46 @@ import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
 import {Storage} from '../util/storage.js';
 
+// todo: need to create a set of "map storage" functions for default use
+
 export class World {
+    static #worlds = new Map();
+    #space = new Space(entity => entity.id);
+
+    /**
+     * @param {number} world
+     * @return {World}
+     */
+
+    static get(world = 0) {
+        if (!World.#worlds.has(world)) {
+            const world = new World();
+            World.#worlds.set(world, world);
+        }
+
+        return World.#worlds.get(world);
+    }
+
+    /**
+     * @param {number} world
+     * @param {number} x
+     * @param {number} y
+     * @param {number} width
+     * @param {number} height
+     * @return {Entity[]}
+     */
+
+    static search(world, x, y, width, height) {
+        return World.get(world).#space.search(x, y, width, height);
+    }
+}
+
+export class World2 {
     static #size = 100;
     static storage = new Storage();
     static #worlds = new Map();
     #loaded = new Set();
-    #space = new Space();
+    #space = new Space(entity => entity.id);
     #key;
 
     /**
@@ -63,9 +97,7 @@ export class World {
 
         // todo: this is actually super buggy, and i'll need a queue here, too
 
-        if (this.#loaded.add(key) && await World.storage.exists(key))
-            for (const entity of await World.storage.load(key))
-                this.#space.add(entity, entity.x, entity.y);
+        if (this.#loaded.add(key) && await World.storage.exists(key)) for (const entity of await World.storage.load(key)) this.#space.add(entity, entity.x, entity.y);
     }
 
     /**
@@ -103,7 +135,7 @@ export class World {
         // todo: should i use another queue here?
 
         const key = this.#storageKey(x, y);
-        if(!this.#loaded.has(key)) return;
+        if (!this.#loaded.has(key)) return;
         await this.save(x, y);
 
         // if (!this.#loaded.delete(key)) return;

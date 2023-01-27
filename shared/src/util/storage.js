@@ -1,40 +1,52 @@
 import {jsonReplacer, jsonReviver} from './json.js';
 import {Queue} from './queue.js';
 
-//todo: instead of these defaults, pass in file system/browser storage functions
+const map = new Map();
+
+/**
+ * @param {string} key
+ * @return {Promise<boolean>}
+ */
+
+export async function mockExists(key) {
+    return map.has(key);
+}
+
+/**
+ * @param {string} key
+ * @return {Promise<*>}
+ */
+
+export async function mockLoad(key) {
+    return map.get(key);
+}
+
+/**
+ * @param {string} key
+ * @param {*} value
+ * @return {Promise<void>}
+ */
+
+export async function mockSave(key, value) {
+    map.set(key, value);
+}
 
 export class Storage {
     #queue = new Queue();
-    #default;
     #exists;
     #load;
     #save;
 
     /**
-     * @param {function(string): boolean|Promise<boolean>} exists
-     * @param {function(string): *} load
-     * @param {function(string, *): void|Promise<void>} save
+     * @param {function(string): Promise<boolean>} exists
+     * @param {function(string): Promise<*>} load
+     * @param {function(string, *): Promise<void>} save
      */
 
-    constructor(exists = this.#defaultExists, load = this.#defaultLoad, save = this.#defaultSave) {
+    constructor(exists, load, save) {
         this.#exists = exists;
         this.#load = load;
         this.#save = save;
-    }
-
-    #defaultExists(key) {
-        this.#default ??= new Map();
-        return this.#default.has(key);
-    }
-
-    #defaultLoad(key) {
-        this.#default ??= new Map();
-        return this.#default.get(key);
-    }
-
-    #defaultSave(key, value) {
-        this.#default ??= new Map();
-        this.#default.set(key, value);
     }
 
     /**
