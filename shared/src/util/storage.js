@@ -3,10 +3,20 @@ import {Queue} from './queue.js';
 
 export class Storage {
     #queue = new Queue();
-    #database;
+    #exists;
+    #load;
+    #save;
 
-    Storage(database) {
-        this.#database = database;
+    /**
+     * @param {function(string): boolean|Promise<boolean>} exists
+     * @param {function(string): *} load
+     * @param {function(string, *): void|Promise<void>} save
+     */
+
+    constructor(exists, load, save) {
+        this.#exists = exists;
+        this.#load = load;
+        this.#save = save;
     }
 
     /**
@@ -15,7 +25,7 @@ export class Storage {
      */
 
     exists(key) {
-        return this.#queue.add(() => this.#database.exists(key));
+        return this.#queue.add(() => this.#exists(key));
     }
 
     /**
@@ -24,7 +34,7 @@ export class Storage {
      */
 
     load(key) {
-        return this.#queue.add(() => JSON.parse(this.#database.load(key), jsonReviver));
+        return this.#queue.add(() => JSON.parse(this.#load(key), jsonReviver));
     }
 
     /**
@@ -34,6 +44,6 @@ export class Storage {
      */
 
     save(key, value) {
-        return this.#queue.add(() => this.#database.save(key, JSON.stringify(value, jsonReplacer)));
+        return this.#queue.add(() => this.#save(key, JSON.stringify(value, jsonReplacer)));
     }
 }
