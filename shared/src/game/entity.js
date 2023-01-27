@@ -1,20 +1,30 @@
 import {GameObject} from './game-object.js';
+import {World} from "./world.js";
 
 export class Entity extends GameObject {
     /**
-     * @return {string}
+     * @param {string} type
      */
 
-    get type() {
-        return undefined;
+    constructor(type) {
+        super();
+        this.set('type', type);
     }
 
     /**
      * @return {string}
      */
 
-    get world() {
-        return this.get('world');
+    get type() {
+        return this.get('type');
+    }
+
+    /**
+     * @return {string}
+     */
+
+    get worldName() {
+        return this.get('worldName');
     }
 
     /**
@@ -34,18 +44,15 @@ export class Entity extends GameObject {
     }
 
     /**
-     * @param {string} world
+     * @param {string} worldName
      * @param {number} x
      * @param {number} y
      */
 
-    move(world, x, y) {
-        this.set('world', world);
+    move(worldName, x, y) {
+        this.set('worldName', worldName);
         if (x !== this.x || y !== this.y) this.set('location', [x, y]);
-
-        //const oldKey = Chunk.getKey(this.world, this.x, this.y), newKey = Chunk.getKey(world, x, y);
-        //this.set('world', world);
-        //if (x !== this.x || y !== this.y) this.set('location', [x, y]);
-        //if (oldKey !== newKey) this.dispatchEvent(new GameEvent('chunk', [], newKey));
+        // todo: update the world with the movements
+        // todo: may need to think about the worlds more
     }
 }
