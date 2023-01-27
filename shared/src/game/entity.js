@@ -1,4 +1,5 @@
 import {GameObject} from './game-object.js';
+import {World} from './world.js';
 
 export class Entity extends GameObject {
     /**
@@ -32,11 +33,13 @@ export class Entity extends GameObject {
      */
 
     move(worldKey, x, y) {
-        if (worldKey !== this.worldName) {
+        if (worldKey !== this.worldKey) {
             this.delete('location');
+            World.get(this.worldKey).update(this);
             this.set('worldKey', worldKey);
         }
 
         if (x !== this.x || y !== this.y) this.set('location', [x, y]);
+        World.get(this.worldKey).update(this);
     }
 }

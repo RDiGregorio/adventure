@@ -12,6 +12,7 @@ export class Space {
 
     add(value, x, y) {
         this.delete(value);
+        if (Number.isNaN(x) || Number.isNaN(y)) return;
         this.#map.set(value, [x, y]);
         this.#rTree.insert({x: x, y: y, w: 0, h: 0}, value);
     }
@@ -37,5 +38,13 @@ export class Space {
 
     search(x, y, width, height) {
         return this.#rTree.bbox([x, y], [x + width - 1, y + height - 1]);
+    }
+
+    /**
+     * @return {IterableIterator<[number, number]>}
+     */
+
+    get points() {
+        return this.#map.values();
     }
 }

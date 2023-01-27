@@ -32,16 +32,8 @@ export class World {
      * @param {Entity} entity
      */
 
-    add(entity) {
-        // todo
-    }
-
-    /**
-     * @param {Entity} entity
-     */
-
-    delete(entity) {
-        // todo
+    update(entity) {
+        entity.worldKey === this.#key ? this.#space.add(entity, entity.x, entity.y) : this.#space.delete(entity);
     }
 
     /**
@@ -77,9 +69,25 @@ export class World {
      */
 
     async save(x, y) {
-        // todo: what about unloading? unloading unused chunks can be done some other way, probably.
-
         const key = this.#storageKey(x, y);
         if (this.#loaded.delete(key)) await World.storage.save(key, this.#space.search(x, y, World.#size, World.#size));
+    }
+
+    /**
+     * @param {number} x
+     * @param {number} y
+     * @return {Promise<void>}
+     */
+
+    async unload(x, y) {
+        // todo
+    }
+
+    /**
+     * @return {string}
+     */
+
+    toString() {
+        return `World{${[...this.#space.points].map(array => `(${array.join(', ')})`)}}`;
     }
 }
