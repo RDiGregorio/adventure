@@ -63,7 +63,7 @@ export class World {
 
         if (this.#loaded.add(key) && await World.storage.exists(key))
             for (const entity of await World.storage.load(key))
-                this.#space.add(entity, x, y);
+                this.#space.add(entity, entity.x, entity.y);
     }
 
     /**

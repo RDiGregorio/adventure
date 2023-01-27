@@ -1,6 +1,8 @@
 import {jsonReplacer, jsonReviver} from './json.js';
 import {Queue} from './queue.js';
 
+//todo: instead of these defaults, pass in file system/browser storage functions
+
 export class Storage {
     #queue = new Queue();
     #default;
