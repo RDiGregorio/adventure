@@ -1,15 +1,21 @@
 import {jsonReplacer, jsonReviver} from './json.js';
+import {Queue} from './queue.js';
 
 export class Storage {
-    static #map = new Map();
+    #queue = new Queue();
+    #database;
+
+    Storage(database) {
+        this.#database = database;
+    }
 
     /**
      * @param {string} key
      * @return {Promise<boolean>}
      */
 
-    static async exists(key) {
-        return this.#map.has(key);
+    exists(key) {
+        return this.#queue.add(() => this.#database.exists(key));
     }
 
     /**
@@ -17,8 +23,8 @@ export class Storage {
      * @return {Promise<*>}
      */
 
-    static async load(key) {
-        return JSON.parse(this.#map.get(key), jsonReviver);
+    load(key) {
+        return this.#queue.add(() => JSON.parse(this.#database.load(key), jsonReviver));
     }
 
     /**
@@ -27,7 +33,7 @@ export class Storage {
      * @return {Promise<void>}
      */
 
-    static async save(key, value) {
-        this.#map.set(key, JSON.stringify(value, jsonReplacer));
+    save(key, value) {
+        return this.#queue.add(() => this.#database.save(key, JSON.stringify(value, jsonReplacer)));
     }
 }
