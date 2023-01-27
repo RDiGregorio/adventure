@@ -1,14 +1,15 @@
 export class Queue {
-    #promise = Promise.resolve(4);
+    #promise = Promise.resolve();
 
     /**
      * @param {function(): *} callback
-     * @return {Promise<void>}
+     * @return {Promise<*>}
      */
 
     add(callback) {
-        return this.#promise = this.#promise.finally(callback);
+        return this.#promise = this.#promise.then(() => callback(), error => {
+            console.error(error);
+            return callback();
+        });
     }
 }
-
-const queue = new Queue();
