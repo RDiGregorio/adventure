@@ -1,13 +1,12 @@
 import {GameObject} from './game-object.js';
-import {World} from "./world.js";
 
 export class Entity extends GameObject {
     /**
      * @return {string}
      */
 
-    get worldName() {
-        return this.get('worldName');
+    get worldKey() {
+        return this.get('worldKey');
     }
 
     /**
@@ -27,15 +26,15 @@ export class Entity extends GameObject {
     }
 
     /**
-     * @param {string} worldName
+     * @param {string} worldKey
      * @param {number} x
      * @param {number} y
      */
 
-    move(worldName, x, y) {
-        if (worldName !== this.worldName) {
+    move(worldKey, x, y) {
+        if (worldKey !== this.worldName) {
             this.delete('location');
-            this.set('worldName', worldName);
+            this.set('worldKey', worldKey);
         }
 
         if (x !== this.x || y !== this.y) this.set('location', [x, y]);
