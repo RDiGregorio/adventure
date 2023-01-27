@@ -3,13 +3,14 @@ import RTree from 'rtree';
 export class Space {
     #rTree = new RTree();
     #map = new Map();
+    #toKey;
 
     /**
-     * @return {Iterable<[number, number]>}
+     * @param {function(*): string} toKey
      */
 
-    get points() {
-        return this.#map.values();
+    constructor(toKey) {
+        this.#toKey = toKey;
     }
 
     /**
@@ -21,7 +22,7 @@ export class Space {
     add(value, x, y) {
         this.delete(value);
         if (Number.isNaN(x) || Number.isNaN(y)) return;
-        this.#map.set(value, [x, y]);
+        this.#map.set(this.#toKey(value), [x, y]);
         this.#rTree.insert({x: x, y: y, w: 0, h: 0}, value);
     }
 
@@ -30,9 +31,10 @@ export class Space {
      */
 
     delete(value) {
-        if (!this.#map.has(value)) return;
-        const [x, y] = this.#map.get(value);
-        this.#map.delete(value);
+        const key = this.#toKey(value);
+        if (!this.#map.has(key)) return;
+        const [x, y] = this.#map.get(key);
+        this.#map.delete(key);
         this.#rTree.remove({x: x, y: y, w: 0, h: 0}, value);
     }
 
@@ -46,5 +48,18 @@ export class Space {
 
     search(x, y, width, height) {
         return this.#rTree.bbox([x, y], [x + width - 1, y + height - 1]);
+    }
+
+    /**
+     * @return {Map<string, [number, number]>}
+     */
+
+    toMap() {
+        const result = new Map();
+
+        for (const [key, value] of this.#map)
+            result.set(key, [...value]);
+
+        return result;
     }
 }

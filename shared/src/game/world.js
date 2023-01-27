@@ -61,6 +61,8 @@ export class World {
     async load(x, y) {
         const key = this.#storageKey(x, y);
 
+        // todo: this is actually super buggy, and i'll need a queue here, too
+
         if (this.#loaded.add(key) && await World.storage.exists(key))
             for (const entity of await World.storage.load(key))
                 this.#space.add(entity, entity.x, entity.y);
@@ -101,8 +103,10 @@ export class World {
         // todo: should i use another queue here?
 
         const key = this.#storageKey(x, y);
-        if (!this.#loaded.delete(key)) return;
+        if(!this.#loaded.has(key)) return;
         await this.save(x, y);
+
+        // if (!this.#loaded.delete(key)) return;
         this.#space.search(x, y, World.#size, World.#size).forEach(this.delete);
     }
 }
