@@ -1,5 +1,6 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
+import {Storage} from '../util/storage.js';
 
 export class World {
     static #size = 100;
@@ -11,10 +12,10 @@ export class World {
 
     /**
      * @param {string} name
-     * @param {Class} storage
+     * @param {Storage} storage
      */
 
-    constructor(name, storage = Storage) {
+    constructor(name, storage = new Storage()) {
         if (World.#worlds.has(name)) return World.#worlds.get(name);
         World.#worlds.set(name, this);
         this.#name = name;

@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import {MultiMap} from './multi-map.js';
 import {GameEvent} from './game-event.js';
-import {uuid} from './uuid.js';
-import {isJsonPrimitive, isJsonPrimitiveArray} from './json.js';
-import {newInstance} from "./instance.js";
+import {MultiMap} from '../util/multi-map.js';
+import {uuid} from '../util/uuid.js';
+import {isJsonPrimitive, isJsonPrimitiveArray} from '../util/json.js';
+import {newInstance} from '../util/instance.js';
 
 export class GameObject extends Map {
     #eventListeners = new Map();

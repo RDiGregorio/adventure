@@ -3,6 +3,7 @@ import {Queue} from './queue.js';
 
 export class Storage {
     #queue = new Queue();
+    #default;
     #exists;
     #load;
     #save;
@@ -13,10 +14,25 @@ export class Storage {
      * @param {function(string, *): void|Promise<void>} save
      */
 
-    constructor(exists, load, save) {
+    constructor(exists = this.#defaultExists, load = this.#defaultLoad, save = this.#defaultSave) {
         this.#exists = exists;
         this.#load = load;
         this.#save = save;
+    }
+
+    #defaultExists(key) {
+        this.#default ??= new Map();
+        return this.#default.has(key);
+    }
+
+    #defaultLoad(key) {
+        this.#default ??= new Map();
+        return this.#default.get(key);
+    }
+
+    #defaultSave(key, value) {
+        this.#default ??= new Map();
+        this.#default.set(key, value);
     }
 
     /**
