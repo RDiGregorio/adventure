@@ -1,6 +1,6 @@
 export class MultiMap extends Map {
     /**
-     * @returns {number}
+     * @return {number}
      */
 
     get size() {
@@ -8,7 +8,7 @@ export class MultiMap extends Map {
     }
 
     /**
-     * @returns {Iterable<[*, *]>}
+     * @return {Iterable<[*, *]>}
      */
 
     * [Symbol.iterator]() {
@@ -20,7 +20,7 @@ export class MultiMap extends Map {
     /**
      * @param {*} key
      * @param {*} value
-     * @returns {boolean}
+     * @return {boolean}
      */
 
     delete(key, value) {
@@ -32,7 +32,7 @@ export class MultiMap extends Map {
     }
 
     /**
-     * @returns {Iterable<[*, *]>}
+     * @return {Iterable<[*, *]>}
      */
 
     * entries() {
@@ -54,7 +54,7 @@ export class MultiMap extends Map {
 
     /**
      * @param {*} key
-     * @returns {Iterable<*>}
+     * @return {Iterable<*>}
      */
 
     * get(key) {
@@ -66,7 +66,7 @@ export class MultiMap extends Map {
     /**
      * @param {*} key
      * @param {*} value
-     * @returns {MultiMap}
+     * @return {MultiMap}
      */
 
     set(key, value) {
@@ -76,7 +76,7 @@ export class MultiMap extends Map {
     }
 
     /**
-     * @returns {Iterable<*>}
+     * @return {Iterable<*>}
      */
 
     * values() {
