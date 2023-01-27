@@ -11,6 +11,14 @@ export class World {
     #key;
 
     /**
+     * @return {Iterable<[number,number]>}
+     */
+
+    get points() {
+        return this.#space.points;
+    }
+
+    /**
      * @param {string} key
      * @return {World}
      */
@@ -81,13 +89,5 @@ export class World {
 
     async unload(x, y) {
         // todo
-    }
-
-    /**
-     * @return {string}
-     */
-
-    toString() {
-        return `World{${[...this.#space.points].map(array => `(${array.join(', ')})`)}}`;
     }
 }

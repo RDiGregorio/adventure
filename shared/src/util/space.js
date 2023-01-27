@@ -5,6 +5,14 @@ export class Space {
     #map = new Map();
 
     /**
+     * @return {Iterable<[number, number]>}
+     */
+
+    get points() {
+        return this.#map.values();
+    }
+
+    /**
      * @param {*} value
      * @param {number} x
      * @param {number} y
@@ -38,13 +46,5 @@ export class Space {
 
     search(x, y, width, height) {
         return this.#rTree.bbox([x, y], [x + width - 1, y + height - 1]);
-    }
-
-    /**
-     * @return {IterableIterator<[number, number]>}
-     */
-
-    get points() {
-        return this.#map.values();
     }
 }
