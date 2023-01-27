@@ -1,10 +1,5 @@
-import {Database} from './src/database.js';
 import {World} from 'shared/src/game/world.js';
+import {Entity} from 'shared/src/game/entity.js';
 
-const storage = new Database();
-console.log(await storage.exists('a'));
-await storage.save('a', 0);
-console.log(await storage.exists('a'));
-console.log(await storage.load('a'));
-
-const world = new World('default');
+const world = new World('default'), entity = new Entity();
+entity.move('default', 100, 100);

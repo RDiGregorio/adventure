@@ -3,23 +3,6 @@ import {World} from "./world.js";
 
 export class Entity extends GameObject {
     /**
-     * @param {string} type
-     */
-
-    constructor(type) {
-        super();
-        this.set('type', type);
-    }
-
-    /**
-     * @return {string}
-     */
-
-    get type() {
-        return this.get('type');
-    }
-
-    /**
      * @return {string}
      */
 
@@ -32,7 +15,7 @@ export class Entity extends GameObject {
      */
 
     get x() {
-        return this.has('location') ? this.get('location')[0] : 0;
+        return this.has('location') ? this.get('location')[0] : undefined;
     }
 
     /**
@@ -40,7 +23,7 @@ export class Entity extends GameObject {
      */
 
     get y() {
-        return this.has('location') ? this.get('location')[1] : 0;
+        return this.has('location') ? this.get('location')[1] : undefined;
     }
 
     /**
@@ -50,9 +33,11 @@ export class Entity extends GameObject {
      */
 
     move(worldName, x, y) {
-        this.set('worldName', worldName);
+        if (worldName !== this.worldName) {
+            this.delete('location');
+            this.set('worldName', worldName);
+        }
+
         if (x !== this.x || y !== this.y) this.set('location', [x, y]);
-        // todo: update the world with the movements
-        // todo: may need to think about the worlds more
     }
 }

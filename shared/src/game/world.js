@@ -1,3 +1,4 @@
+import {GameObject} from './game-object.js';
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
 import {Storage} from '../util/storage.js';
@@ -5,8 +6,9 @@ import {Storage} from '../util/storage.js';
 export class World {
     static #size = 100;
     static #worlds = new Map();
+    #entities = new GameObject()
     #loaded = new Set();
-    #spaces = new Map();
+    #space = new Space();
     #name;
     #storage;
 
@@ -20,11 +22,6 @@ export class World {
         World.#worlds.set(name, this);
         this.#name = name;
         this.#storage = storage;
-    }
-
-    #space(type) {
-        if (!this.#spaces.has(type)) this.#spaces.set(type, new Space());
-        return this.#spaces.get(type);
     }
 
     #storageKey(x, y) {
@@ -43,11 +40,10 @@ export class World {
 
         if (this.#loaded.add(key) && await this.#storage.exists(key))
             for (const entity of await this.#storage.load(key))
-                this.#space(entity.type).add(entity, x, y);
+                this.#space.add(entity, x, y);
     }
 
     /**
-     * @param {string} type
      * @param {number} x
      * @param {number} y
      * @param {number} width
@@ -55,20 +51,12 @@ export class World {
      * @return {Entity[]}
      */
 
-    search(type, x, y, width, height) {
-        return this.#space(type).search(x, y, width, height);
+    search(x, y, width, height) {
+        return this.#space.search(x, y, width, height);
     }
 
     async save(x, y) {
         const key = this.#storageKey(x, y);
-
-        if (this.#loaded.delete(key)) {
-            const entities = [];
-
-            for (const space of this.#spaces.values())
-                entities.push(...space.search(x, y, World.#size, World.#size));
-
-            await this.#storage.save(key, entities);
-        }
+        if (this.#loaded.delete(key)) await this.#storage.save(key, this.#space.search(x, y, World.#size, World.#size));
     }
 }
