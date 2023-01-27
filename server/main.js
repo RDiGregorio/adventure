@@ -1,6 +1,6 @@
-import {ServerStorage} from './src/server-storage.js';
+import {Database} from './src/database.js';
 
-const storage = new ServerStorage();
+const storage = new Database();
 console.log(await storage.exists('a'));
 await storage.save('a', 0);
 console.log(await storage.exists('a'));

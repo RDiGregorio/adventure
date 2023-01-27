@@ -1,6 +1,6 @@
 import {Storage} from 'shared/src/util/storage.js';
 
-export class ServerStorage extends Storage {
+export class Database extends Storage {
     constructor() {
         // todo: use an actual database
 
