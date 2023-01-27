@@ -35,11 +35,11 @@ export class Entity extends GameObject {
     move(worldKey, x, y) {
         if (worldKey !== this.worldKey) {
             this.delete('location');
-            World.get(this.worldKey).update(this);
+            World.get(this.worldKey).delete(this);
             this.set('worldKey', worldKey);
         }
 
         if (x !== this.x || y !== this.y) this.set('location', [x, y]);
-        World.get(this.worldKey).update(this);
+        World.get(worldKey).add(this);
     }
 }

@@ -40,8 +40,16 @@ export class World {
      * @param {Entity} entity
      */
 
-    update(entity) {
-        entity.worldKey === this.#key ? this.#space.add(entity, entity.x, entity.y) : this.#space.delete(entity);
+    add(entity) {
+        this.#space.add(entity, entity.x, entity.y);
+    }
+
+    /**
+     * @param {Entity} entity
+     */
+
+    delete(entity) {
+        this.#space.delete(entity);
     }
 
     /**
@@ -77,8 +85,10 @@ export class World {
      */
 
     async save(x, y) {
+        // todo: probably shouldn't save players...
+
         const key = this.#storageKey(x, y);
-        if (this.#loaded.delete(key)) await World.storage.save(key, this.#space.search(x, y, World.#size, World.#size));
+        await World.storage.save(key, this.search(x, y, World.#size, World.#size));
     }
 
     /**
@@ -88,6 +98,11 @@ export class World {
      */
 
     async unload(x, y) {
-        // todo
+        // todo: should i use another queue here?
+
+        const key = this.#storageKey(x, y);
+        if (!this.#loaded.delete(key)) return;
+        await this.save(x, y);
+        this.#space.search(x, y, World.#size, World.#size).forEach(this.delete);
     }
 }
