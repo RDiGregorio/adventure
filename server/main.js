@@ -8,7 +8,5 @@ import {Space} from "shared/src/util/space.js";
 //console.log(JSON.stringify([...world.points]));
 
 const space = new Space(value => `${value}`);
-space.add('a', 100, 0);
-space.add('b', 100, 100);
-space.add('a', 100, 200);
-console.log(space.toMap())
+space.add('a', 0, 0);
+space.add('a', 0, 0);

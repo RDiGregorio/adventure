@@ -35,7 +35,12 @@ export class Space {
         if (!this.#map.has(key)) return;
         const [x, y] = this.#map.get(key);
         this.#map.delete(key);
-        this.#rTree.remove({x: x, y: y, w: 0, h: 0}, value);
+
+        this
+            .search(x, y, 1, 1)
+            .filter(value => this.#toKey(value) === key)
+            .forEach(value => this.#rTree.remove({x: x, y: y, w: 0, h: 0}, value));
+
     }
 
     /**
