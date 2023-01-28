@@ -62,6 +62,7 @@ export class Space {
      */
 
     search(x, y, width, height) {
+        if (width < 1 || height < 1) return [];
         return this.#rTree.bbox(x, y, x + width - 1, y + height - 1);
     }
 }
