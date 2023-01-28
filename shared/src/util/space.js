@@ -15,6 +15,16 @@ export class Space {
     }
 
     /**
+     * @return {Iterable<*>}
+     */
+
+    * [Symbol.iterator]() {
+        const x = this.#rTree.root.x, y = this.#rTree.root.y;
+        for (const value of this.#rTree.bbox(x, y, x + this.#rTree.root.w, y + this.#rTree.root.h))
+            yield value;
+    }
+
+    /**
      * @param {*} value
      * @param {number} x
      * @param {number} y
@@ -41,7 +51,6 @@ export class Space {
             .search(x, y, 1, 1)
             .filter(value => this.#toKey(value) === key)
             .forEach(value => this.#rTree.remove({x: x, y: y, w: 0, h: 0}, value));
-
     }
 
     /**
@@ -53,19 +62,6 @@ export class Space {
      */
 
     search(x, y, width, height) {
-        return this.#rTree.bbox([x, y], [x + width - 1, y + height - 1]);
-    }
-
-    /**
-     * @return {Map<string, [number, number]>}
-     */
-
-    toMap() {
-        const result = new Map();
-
-        for (const [key, value] of this.#map)
-            result.set(key, [...value]);
-
-        return result;
+        return this.#rTree.bbox(x, y, x + width - 1, y + height - 1);
     }
 }
