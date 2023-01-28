@@ -102,7 +102,8 @@ export class EntityManager {
     save(world, x, y, width, height, unload = false) {
         return this.#queue.add(async () => {
             const key = this.#key(world, x, y, width, height);
-            if (!this.#loaded.has(key)) return;
+
+            if (!this.#loaded.has(key) && await this.#storage.exists(this.#key(world, x, y, width, height))) return;
             const entities = this.search(world, x, y, width, height);
             await this.#storage.save(key, entities);
 
