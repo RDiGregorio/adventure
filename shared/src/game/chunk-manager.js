@@ -77,12 +77,10 @@ export class ChunkManager {
      * @param {number} world
      * @param {number} x
      * @param {number} y
-     * @param {number} width
-     * @param {number} height
      * @return {Promise<void>}
      */
 
-    load(world, x, y, width, height) {
+    load(world, x, y) {
         return this.#queue.add(async () => {
             const key = this.#key(world, x, y);
 
@@ -96,18 +94,16 @@ export class ChunkManager {
      * @param {number} world
      * @param {number} x
      * @param {number} y
-     * @param {number} width
-     * @param {number} height
      * @param {boolean} unload
      * @return {Promise<void>}
      */
 
-    save(world, x, y, width, height, unload = false) {
+    save(world, x, y, unload = false) {
         return this.#queue.add(async () => {
             const key = this.#key(world, x, y);
 
             if (!this.#loaded.has(key) && await this.#storage.exists(this.#key(world, x, y))) return;
-            const entities = this.search(world, x, y, width, height);
+            const entities = this.search(world, x, y, this.#chunkSize, this.#chunkSize);
             await this.#storage.save(key, entities);
 
             if (unload) {
