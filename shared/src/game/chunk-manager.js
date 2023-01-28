@@ -3,12 +3,6 @@ import {Space} from '../util/space.js';
 import {Storage} from '../util/storage.js';
 import {Queue} from '../util/queue.js';
 
-// todo: handle periodic saves/loads
-// also need a way to "save all"
-// "create" is probably not needed
-// "loaded" can be a map, pointing to the arrays
-// then can have a "chunks" function that returns chunk coordinates
-
 export class ChunkManager {
     #queue = new Queue();
     #loaded = new Map();
