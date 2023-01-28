@@ -2,7 +2,7 @@ import {expect, test} from 'vitest';
 import {Space} from '../src/util/space.js';
 
 test('space.search', () => {
-    const space = new Space(value => value);
+    const space = new Space();
     space.add('a', 0, 0);
     expect(space.search(0, 0, 0, 0)).toEqual([]);
     expect(space.search(-1, -1, 1, 1)).toEqual([]);
@@ -11,7 +11,7 @@ test('space.search', () => {
 });
 
 test('space.add', () => {
-    const space = new Space(value => value);
+    const space = new Space();
     space.add('a', 0, 0);
     space.add('b', 0, 0);
     space.add('a', 1, 1);
@@ -20,7 +20,7 @@ test('space.add', () => {
 });
 
 test('space.delete', () => {
-    const space = new Space(value => value);
+    const space = new Space();
     space.add('a', 0, 0);
     space.add('b', 0, 0);
     expect(space.search(0, 0, 1, 1).sort()).toEqual(['a', 'b']);

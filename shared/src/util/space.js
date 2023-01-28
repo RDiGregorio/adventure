@@ -7,10 +7,10 @@ export class Space {
     #toKey;
 
     /**
-     * @param {function(*): string} toKey
+     * @param {function(*): *} toKey
      */
 
-    constructor(toKey) {
+    constructor(toKey = value => value) {
         this.#toKey = toKey;
     }
 
