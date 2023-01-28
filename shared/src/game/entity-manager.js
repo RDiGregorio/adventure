@@ -87,9 +87,28 @@ export class EntityManager {
 
     async save(world, x, y, width, height, unload = false) {
         return this.#queue.add(async () => {
-            const key = this.#key(world, x, y, width, height), entities = this.search(world, x, y, width, height);
+            const key = this.#key(world, x, y, width, height);
+            if (!this.#loaded.has(key)) return;
+            const entities = this.search(world, x, y, width, height);
             await this.#storage.save(key, entities);
-            if (unload) entities.forEach(this.delete);
+
+            if (unload) {
+                this.#loaded.delete(key);
+                entities.forEach(this.delete);
+            }
         });
+    }
+
+    /**
+     * @return {Map<number, Map<string, [number, number]>>}
+     */
+
+    toMap() {
+        const result = new Map();
+
+        for (const [key, value] of this.#spaces)
+            result.set(key, value.toMap());
+
+        return result;
     }
 }

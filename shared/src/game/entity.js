@@ -1,5 +1,4 @@
 import {GameObject} from './game-object.js';
-import {World} from './world.js';
 
 export class Entity extends GameObject {
     /**
