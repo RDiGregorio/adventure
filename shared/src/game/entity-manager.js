@@ -113,17 +113,4 @@ export class EntityManager {
             }
         });
     }
-
-    /**
-     * @return {Map<number, Map<string, [number, number]>>}
-     */
-
-    toMap() {
-        const result = new Map();
-
-        for (const [key, value] of this.#spaces)
-            result.set(key, value.toMap());
-
-        return result;
-    }
 }
