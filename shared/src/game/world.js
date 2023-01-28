@@ -67,10 +67,12 @@ export class EntityManager {
      */
 
     async load(world, x, y, width, height) {
-        const key = this.#key(world, x, y, width, height);
-        if (this.#loaded.add(key) && await this.#storage.exists(key))
-            for (const entity of await this.#storage.load(key))
-                this.add(entity, entity.world, entity.x, entity.y);
+        return this.#queue.add(async () => {
+            const key = this.#key(world, x, y, width, height);
+            if (this.#loaded.add(key) && await this.#storage.exists(key))
+                for (const entity of await this.#storage.load(key))
+                    this.add(entity, entity.world, entity.x, entity.y);
+        });
     }
 
     /**
@@ -84,8 +86,10 @@ export class EntityManager {
      */
 
     async save(world, x, y, width, height, unload = false) {
-        const key = this.#key(world, x, y, width, height), entities = this.search(world, x, y, width, height);
-        await this.#storage.save(key, entities);
-        if (unload) entities.forEach(this.delete);
+        return this.#queue.add(async () => {
+            const key = this.#key(world, x, y, width, height), entities = this.search(world, x, y, width, height);
+            await this.#storage.save(key, entities);
+            if (unload) entities.forEach(this.delete);
+        });
     }
 }
