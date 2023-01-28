@@ -3,6 +3,9 @@ import {Space} from '../util/space.js';
 import {Storage} from '../util/storage.js';
 import {Queue} from '../util/queue.js';
 
+// todo: handle periodic saves/loads, possibly thought "storage"?
+// also need a way to "save all"
+
 export class ChunkManager {
     #queue = new Queue();
     #loaded = new Set();
@@ -64,12 +67,10 @@ export class ChunkManager {
      * @param {number} world
      * @param {number} x
      * @param {number} y
-     * @param {number} width
-     * @param {number} height
      * @return {Promise<boolean>}
      */
 
-    exists(world, x, y, width, height) {
+    exists(world, x, y) {
         return this.#queue.add(() => this.#storage.exists(this.#key(world, x, y)));
     }
 
