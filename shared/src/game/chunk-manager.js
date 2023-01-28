@@ -3,12 +3,15 @@ import {Space} from '../util/space.js';
 import {Storage} from '../util/storage.js';
 import {Queue} from '../util/queue.js';
 
-// todo: handle periodic saves/loads, possibly thought "storage"?
+// todo: handle periodic saves/loads
 // also need a way to "save all"
+// "create" is probably not needed
+// "loaded" can be a map, pointing to the arrays
+// then can have a "chunks" function that returns chunk coordinates
 
 export class ChunkManager {
     #queue = new Queue();
-    #loaded = new Set();
+    #loaded = new Map();
     #spaces = new Map();
     #storage;
     #chunkSize;
@@ -23,8 +26,16 @@ export class ChunkManager {
         this.#chunkSize = chunkSize;
     }
 
+    /**
+     * @return {Iterable<[number, number, number]>}
+     */
+
+    get loaded() {
+        return this.#loaded.values();
+    }
+
     #key(world, x, y) {
-        return `world/${world} ${x} ${y}`;
+        return `world/${world}.${x}.${y}.json`;
     }
 
     /**
@@ -78,15 +89,16 @@ export class ChunkManager {
      * @param {number} world
      * @param {number} x
      * @param {number} y
-     * @param {function(number, number, number): Entity[]} create
+     * @param {function(): Entity[]} create
      * @return {Promise<void>}
      */
 
     load(world, x, y, create) {
         return this.#queue.add(async () => {
             const key = this.#key(world, x, y);
-            if (!this.#loaded.add(key)) return;
-            const entities = await this.#storage.exists(key) ? await this.#storage.load(key) : create(world, x, y);
+            if (this.#loaded.has(key)) return;
+            this.#loaded.set(key, [world, x, y]);
+            const entities = await this.#storage.exists(key) ? await this.#storage.load(key) : create();
 
             for (const entity of entities)
                 this.add(entity, entity.world, entity.x, entity.y);
@@ -111,7 +123,7 @@ export class ChunkManager {
 
             if (unload) {
                 this.#loaded.delete(key);
-                entities.forEach(this.delete);
+                entities.forEach(entity => this.delete(entity));
             }
         });
     }

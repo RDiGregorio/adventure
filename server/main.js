@@ -6,13 +6,15 @@ import {random} from 'shared/src/util/math.js';
 
 const manager = new ChunkManager(new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer), 100);
 
-await manager.load(0, 0, 0, (world, x, y) => {
+await manager.load(0, 0, 0, () => {
     const result = [];
 
     for (let i = 0; i < 10; i++)
-        result.push(new Entity(0, x + random(100), y + random(100)));
+        result.push(new Entity(0, random(100), random(100)));
 
     return result;
 });
 
-console.log(manager.search(0, 0, 0, 100, 100));
+console.log([...manager.loaded]);
+await manager.save(0, 0, 0, true);
+console.log([...manager.loaded]);
