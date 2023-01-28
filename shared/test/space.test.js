@@ -27,8 +27,8 @@ test('space.delete', () => {
     space.add('b', 0, 0);
     expect(space.search(0, 0, 1, 1).sort()).toEqual(['a', 'b']);
     space.delete('a');
-    expect([...space]).toEqual(['b']);
+    expect(space.toList()).toEqual(['b']);
     space.add('b', 1, 1);
     space.delete('b');
-    expect([...space]).toEqual([]);
+    expect(space.toList()).toEqual([]);
 });

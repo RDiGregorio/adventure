@@ -15,13 +15,12 @@ export class Space {
     }
 
     /**
-     * @return {Iterable<*>}
+     * @return {*[]}
      */
 
-    * [Symbol.iterator]() {
+    toList() {
         const x = this.#rTree.root.x, y = this.#rTree.root.y;
-        for (const value of this.#rTree.bbox(x, y, x + this.#rTree.root.w, y + this.#rTree.root.h))
-            yield value;
+        return this.#rTree.bbox(x, y, x + this.#rTree.root.w, y + this.#rTree.root.h);
     }
 
     /**

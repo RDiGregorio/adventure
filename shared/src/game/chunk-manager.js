@@ -21,11 +21,11 @@ export class ChunkManager {
     }
 
     /**
-     * @return {Iterable<[number, number, number]>}
+     * @return {number[][]}
      */
 
-    get loaded() {
-        return this.#loaded.values();
+    get chunks() {
+        return [...this.#loaded.values()].map(array => [...array]);
     }
 
     #key(world, x, y) {
