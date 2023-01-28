@@ -8,6 +8,8 @@ test('space.search', () => {
     expect(space.search(-1, -1, 1, 1)).toEqual([]);
     expect(space.search(0, 0, 1, 1)).toEqual(['a']);
     expect(space.search(-1, -1, 2, 2)).toEqual(['a']);
+    space.add('b', -1, -1);
+    expect(space.search(-1, -1, 1, 1)).toEqual(['b']);
 });
 
 test('space.add', () => {
