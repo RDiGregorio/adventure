@@ -1,7 +1,6 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {mockExists, mockLoad, mockSave, Storage} from '../util/storage.js';
-import {jsonReplacer, jsonReviver} from '../util/json.js';
+import {Storage} from '../util/storage.js';
 import {Queue} from '../util/queue.js';
 
 export class EntityManager {
