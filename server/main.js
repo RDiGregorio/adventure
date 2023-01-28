@@ -10,3 +10,6 @@ manager.add(new Entity(), 0, -1000, 500);
 console.log(manager.toMap());
 manager.delete(entity);
 console.log(manager.toMap());
+console.log(await manager.exists(0, 0, 0, 0, 0));
+await manager.save(0, 0, 0, 0, 0);
+console.log(await manager.exists(0, 0, 0, 0, 0));

@@ -63,13 +63,27 @@ export class EntityManager {
      * @param {number} y
      * @param {number} width
      * @param {number} height
+     * @return {Promise<boolean>}
+     */
+
+    exists(world, x, y, width, height) {
+        return this.#queue.add(() => this.#storage.exists(this.#key(world, x, y, width, height)));
+    }
+
+    /**
+     * @param {number} world
+     * @param {number} x
+     * @param {number} y
+     * @param {number} width
+     * @param {number} height
      * @return {Promise<void>}
      */
 
-    async load(world, x, y, width, height) {
+    load(world, x, y, width, height) {
         return this.#queue.add(async () => {
             const key = this.#key(world, x, y, width, height);
-            if (this.#loaded.add(key) && await this.#storage.exists(key))
+
+            if (this.#loaded.add(key))
                 for (const entity of await this.#storage.load(key))
                     this.add(entity, entity.world, entity.x, entity.y);
         });
@@ -85,7 +99,7 @@ export class EntityManager {
      * @return {Promise<void>}
      */
 
-    async save(world, x, y, width, height, unload = false) {
+    save(world, x, y, width, height, unload = false) {
         return this.#queue.add(async () => {
             const key = this.#key(world, x, y, width, height);
             if (!this.#loaded.has(key)) return;
