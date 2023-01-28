@@ -77,16 +77,18 @@ export class ChunkManager {
      * @param {number} world
      * @param {number} x
      * @param {number} y
+     * @param {function(number, number, number): Entity[]} create
      * @return {Promise<void>}
      */
 
-    load(world, x, y) {
+    load(world, x, y, create) {
         return this.#queue.add(async () => {
             const key = this.#key(world, x, y);
+            if (!this.#loaded.add(key)) return;
+            const entities = await this.#storage.exists(key) ? await this.#storage.load(key) : create(world, x, y);
 
-            if (this.#loaded.add(key))
-                for (const entity of await this.#storage.load(key))
-                    this.add(entity, entity.world, entity.x, entity.y);
+            for (const entity of entities)
+                this.add(entity, entity.world, entity.x, entity.y);
         });
     }
 

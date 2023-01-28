@@ -2,6 +2,18 @@ import {GameObject} from './game-object.js';
 
 export class Entity extends GameObject {
     /**
+     * @param {number} world
+     * @param {number} x
+     * @param {number} y
+     */
+
+    constructor(world, x, y) {
+        super();
+        this.set('world', world);
+        this.set('location', [x, y]);
+    }
+
+    /**
      * @return {number}
      */
 

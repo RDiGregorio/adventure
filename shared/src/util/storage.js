@@ -69,7 +69,7 @@ export class Storage {
      */
 
     load(key) {
-        return this.#queue.add(() => JSON.parse(this.#load(key), this.#reviver));
+        return this.#queue.add(async () => JSON.parse(await this.#load(key), this.#reviver));
     }
 
     /**
