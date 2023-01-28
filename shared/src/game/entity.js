@@ -6,8 +6,8 @@ export class Entity extends GameObject {
      * @return {string}
      */
 
-    get worldKey() {
-        return this.get('worldKey');
+    get world() {
+        return this.get('world');
     }
 
     /**
@@ -27,19 +27,19 @@ export class Entity extends GameObject {
     }
 
     /**
-     * @param {string} worldKey
+     * @param {string} world
      * @param {number} x
      * @param {number} y
      */
+    /*
+        move(world, x, y) {
+            if (worldKey !== this.worldKey) {
+                this.delete('location');
+                World.get(this.worldKey).delete(this);
+                this.set('worldKey', worldKey);
+            }
 
-    move(worldKey, x, y) {
-        if (worldKey !== this.worldKey) {
-            this.delete('location');
-            World.get(this.worldKey).delete(this);
-            this.set('worldKey', worldKey);
-        }
-
-        if (x !== this.x || y !== this.y) this.set('location', [x, y]);
-        World.get(worldKey).add(this);
-    }
+            if (x !== this.x || y !== this.y) this.set('location', [x, y]);
+            World.get(worldKey).add(this);
+        }*/
 }

@@ -1,24 +1,15 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
 import {mockExists, mockLoad, mockSave, Storage} from '../util/storage.js';
+import {jsonReplacer, jsonReviver} from '../util/json.js';
 
-export class World {
-    static #worlds = new Map();
-    static storage = new Storage(mockExists, mockLoad, mockSave);
-    #space = new Space(entity => entity.id);
+export class EntityManager {
+    #spaces = new Map();
+    #storage;
 
-    /**
-     * @param {number} world
-     * @return {World}
-     */
-
-    static get(world = 0) {
-        if (!World.#worlds.has(world)) {
-            const world = new World();
-            World.#worlds.set(world, world);
-        }
-
-        return World.#worlds.get(world);
+    constructor(storage) {
+        // new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer);
+        this.#storage = storage;
     }
 
     /**
@@ -31,7 +22,30 @@ export class World {
      */
 
     static search(world, x, y, width, height) {
-        return World.get(world).#space.search(x, y, width, height);
+        return this.#spaces.get(world)?.search(x, y, width, height) ?? [];
+    }
+
+    /**
+     * @param {Entity} entity
+     * @param {string} world
+     * @param {number} x
+     * @param {number} y
+     */
+
+    add(entity, world, x, y) {
+        this.delete(entity);
+        entity.set('world', world);
+        entity.set('location', [x, y]);
+        if (!this.#spaces.has(world)) this.#spaces.set(world, new Space(entity => entity.id));
+        this.#spaces.get(world).add(entity, x, y);
+    }
+
+    /**
+     * @param {Entity} entity
+     */
+
+    delete(entity) {
+        this.#spaces.get(entity.get('world'))?.delete(entity);
     }
 }
 
