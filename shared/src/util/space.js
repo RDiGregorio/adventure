@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import RTree from 'rtree';
 
 export class Space {
@@ -21,7 +22,7 @@ export class Space {
 
     add(value, x, y) {
         this.delete(value);
-        if (Number.isNaN(x) || Number.isNaN(y)) return;
+        if (!_.isFinite(x) || !_.isFinite(y)) return;
         this.#map.set(this.#toKey(value), [x, y]);
         this.#rTree.insert({x: x, y: y, w: 0, h: 0}, value);
     }
