@@ -1,6 +1,6 @@
 import {Storage, mockExists, mockLoad, mockSave} from 'shared/src/util/storage.js';
 import {jsonReplacer, jsonReviver} from 'shared/src/util/json.js';
-import {EntityManager} from "shared/src/game/entity-manager.js";
+import {ChunkManager} from "shared/src/game/entity-manager.js";
 import {Entity} from 'shared/src/game/entity.js';
 import {Space} from "shared/src/util/space.js";
 /*

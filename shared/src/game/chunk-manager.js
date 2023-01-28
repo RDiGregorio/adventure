@@ -3,22 +3,25 @@ import {Space} from '../util/space.js';
 import {Storage} from '../util/storage.js';
 import {Queue} from '../util/queue.js';
 
-export class EntityManager {
+export class ChunkManager {
     #queue = new Queue();
     #loaded = new Set();
     #spaces = new Map();
     #storage;
+    #chunkSize;
 
     /**
      * @param {Storage} storage
+     * @param {number} chunkSize
      */
 
-    constructor(storage) {
+    constructor(storage, chunkSize) {
         this.#storage = storage;
+        this.#chunkSize = chunkSize;
     }
 
-    #key(world, x, y, width, height) {
-        return `world/${world} ${x} ${y} ${width} ${height}`;
+    #key(world, x, y) {
+        return `world/${world} ${x} ${y}`;
     }
 
     /**
@@ -67,7 +70,7 @@ export class EntityManager {
      */
 
     exists(world, x, y, width, height) {
-        return this.#queue.add(() => this.#storage.exists(this.#key(world, x, y, width, height)));
+        return this.#queue.add(() => this.#storage.exists(this.#key(world, x, y)));
     }
 
     /**
@@ -81,7 +84,7 @@ export class EntityManager {
 
     load(world, x, y, width, height) {
         return this.#queue.add(async () => {
-            const key = this.#key(world, x, y, width, height);
+            const key = this.#key(world, x, y);
 
             if (this.#loaded.add(key))
                 for (const entity of await this.#storage.load(key))
@@ -101,9 +104,9 @@ export class EntityManager {
 
     save(world, x, y, width, height, unload = false) {
         return this.#queue.add(async () => {
-            const key = this.#key(world, x, y, width, height);
+            const key = this.#key(world, x, y);
 
-            if (!this.#loaded.has(key) && await this.#storage.exists(this.#key(world, x, y, width, height))) return;
+            if (!this.#loaded.has(key) && await this.#storage.exists(this.#key(world, x, y))) return;
             const entities = this.search(world, x, y, width, height);
             await this.#storage.save(key, entities);
 
