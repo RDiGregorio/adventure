@@ -1,7 +1,7 @@
 import {expect, test} from 'vitest';
 import {GameObject} from '../src/engine/game-object.js';
 
-test('object.sync', () => {
+test('gameObject.sync', () => {
     const objects = [new GameObject(), new GameObject()];
     objects[0].set('a', 0);
     objects[0].set('b', 1);
