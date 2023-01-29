@@ -19,7 +19,7 @@ export class Entity extends GameObject {
      */
 
     get world() {
-        return this.get('world');
+        return this.has('world') ? this.get('world') : 0;
     }
 
     /**
@@ -27,7 +27,7 @@ export class Entity extends GameObject {
      */
 
     get x() {
-        return this.has('location') ? this.get('location')[0] : undefined;
+        return this.has('location') ? this.get('location')[0] : 0;
     }
 
     /**
@@ -35,7 +35,7 @@ export class Entity extends GameObject {
      */
 
     get y() {
-        return this.has('location') ? this.get('location')[1] : undefined;
+        return this.has('location') ? this.get('location')[1] : 0;
     }
 
     /**
