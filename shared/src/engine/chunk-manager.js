@@ -7,17 +7,17 @@ export class ChunkManager {
     #queue = new Queue();
     #loaded = new Map();
     #spaces = new Map();
-    #storage;
     #chunkSize;
+    #storage;
 
     /**
-     * @param {Storage} storage
      * @param {number} chunkSize
+     * @param {Storage} storage
      */
 
-    constructor(storage, chunkSize) {
-        this.#storage = storage;
+    constructor(chunkSize, storage) {
         this.#chunkSize = chunkSize;
+        this.#storage = storage;
     }
 
     /**

@@ -3,11 +3,10 @@ import {jsonReplacer, jsonReviver} from 'shared/src/util/json.js';
 import {ChunkManager} from 'shared/src/engine/chunk-manager.js';
 import {Entity} from 'shared/src/engine/entity.js';
 import {random} from 'shared/src/util/math.js';
-import {GameObject} from "shared/src/engine/game-object.js";
 
-// the "game" folder should really be named "engine"
+// chunk manager is specific enough to the game to use entities
 
-const manager = new ChunkManager(new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer), 100);
+const manager = new ChunkManager(100, new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer));
 
 await manager.load(0, 0, 0, () => {
     const result = [];
