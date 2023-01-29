@@ -48,7 +48,7 @@ export class GameObject extends Map {
      */
 
     static jsonReviver(key, value) {
-        if (value?.hasOwnProperty('class') && value?.hasOwnProperty('id') && value?.hasOwnProperty('data')) {
+        if (value?.class === 'GameObject') {
             const result = newInstance(value.class);
             result.id = value.id;
             Object.entries(value.data).forEach(entry => result.set(...entry));

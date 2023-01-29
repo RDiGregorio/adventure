@@ -1,6 +1,6 @@
 import {Queue} from './queue.js';
 
-const map = new Map();
+export const mockDatabase = new Map();
 
 /**
  * @param {string} key
@@ -8,7 +8,7 @@ const map = new Map();
  */
 
 export async function mockExists(key) {
-    return map.has(key);
+    return mockDatabase.has(key);
 }
 
 /**
@@ -17,7 +17,7 @@ export async function mockExists(key) {
  */
 
 export async function mockLoad(key) {
-    return map.get(key);
+    return mockDatabase.get(key);
 }
 
 /**
@@ -27,7 +27,7 @@ export async function mockLoad(key) {
  */
 
 export async function mockSave(key, value) {
-    map.set(key, value);
+    mockDatabase.set(key, value);
 }
 
 export class Storage {
