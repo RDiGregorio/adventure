@@ -1,6 +1,6 @@
 import {GameObject} from './game-object.js';
 
-class GameView extends GameObject {
+export class GameView extends GameObject {
     #viewer;
     #chunkManager;
 
@@ -16,10 +16,16 @@ class GameView extends GameObject {
     }
 
     async load() {
+        const entities = new Map();
+
         for (let x = -1; x <= 1; x++)
             for (let y = -1; y <= 1; y++) {
                 const size = this.#chunkManager.chunkSize;
                 await this.#chunkManager.load(this.#viewer.world, x * size, y * size);
+                this.#chunkManager.search(this.#viewer.world, x * size, y * size)
+                    .forEach(entity => entities.set(entity.id, entity));
             }
+
+        this.sync(entities);
     }
 }

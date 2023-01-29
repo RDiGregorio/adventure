@@ -1,6 +1,16 @@
 const classes = new Map();
 
 /**
+ * Returns a class registered with `registerClass`.
+ * @param {string} string
+ * @return {Class}
+ */
+
+export function getRegisteredClass(string) {
+    return classes.get(string);
+}
+
+/**
  * Returns a new instance of a class registered with `registerClass`.
  * @param {string} string
  * @param {*[]} array
@@ -13,7 +23,7 @@ export function newInstance(string, array = []) {
 }
 
 /**
- * Registers `type` for `newInstance`.
+ * Registers `type` for `getClass` and `newInstance`.
  * @param {Class} type
  */
 

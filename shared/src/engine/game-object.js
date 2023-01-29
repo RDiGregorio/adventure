@@ -3,7 +3,7 @@ import {GameEvent} from './game-event.js';
 import {MultiMap} from '../util/multi-map.js';
 import {uuid} from '../util/uuid.js';
 import {isJsonPrimitive, isJsonPrimitiveArray} from '../util/json.js';
-import {newInstance} from '../util/instance.js';
+import {getRegisteredClass, newInstance} from '../util/instance.js';
 
 export class GameObject extends Map {
     #eventListeners = new Map();
@@ -48,7 +48,9 @@ export class GameObject extends Map {
      */
 
     static jsonReviver(key, value) {
-        if (value?.class === 'GameObject') {
+        const type = getRegisteredClass(value?.class);
+
+        if (type === GameObject || type?.prototype instanceof GameObject) {
             const result = newInstance(value.class);
             result.id = value.id;
             Object.entries(value.data).forEach(entry => result.set(...entry));
