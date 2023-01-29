@@ -17,7 +17,7 @@ await manager.load(0, 0, 0, () => {
     return result;
 });
 
-console.log(manager.chunks);
+console.log(manager.loadedChunkLocations);
 await manager.save(0, 0, 0, true);
-console.log(manager.chunks);
+console.log(manager.loadedChunkLocations);
 await manager.save(0, 0, 0, true);

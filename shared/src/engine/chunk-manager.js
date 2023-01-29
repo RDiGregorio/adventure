@@ -24,7 +24,7 @@ export class ChunkManager {
      * @return {number[][]}
      */
 
-    get chunks() {
+    get loadedChunkLocations() {
         return [...this.#loaded.values()].map(array => [...array]);
     }
 
