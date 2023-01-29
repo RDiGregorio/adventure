@@ -4,14 +4,14 @@ import RTree from 'rtree';
 export class Space {
     #rTree = new RTree();
     #map = new Map();
-    #toKey;
+    #identity;
 
     /**
-     * @param {function(*): *} toKey
+     * @param {function(*): *} identity
      */
 
-    constructor(toKey = value => value) {
-        this.#toKey = toKey;
+    constructor(identity = value => value) {
+        this.#identity = identity;
     }
 
     /**
@@ -32,7 +32,7 @@ export class Space {
     add(value, x, y) {
         this.delete(value);
         if (!_.isFinite(x) || !_.isFinite(y)) return;
-        this.#map.set(this.#toKey(value), [x, y]);
+        this.#map.set(this.#identity(value), [x, y]);
         this.#rTree.insert({x: x, y: y, w: 0, h: 0}, value);
     }
 
@@ -41,14 +41,14 @@ export class Space {
      */
 
     delete(value) {
-        const key = this.#toKey(value);
+        const key = this.#identity(value);
         if (!this.#map.has(key)) return;
         const [x, y] = this.#map.get(key);
         this.#map.delete(key);
 
         this
             .search(x, y, 1, 1)
-            .filter(value => this.#toKey(value) === key)
+            .filter(value => this.#identity(value) === key)
             .forEach(value => this.#rTree.remove({x: x, y: y, w: 0, h: 0}, value));
     }
 

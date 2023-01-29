@@ -28,10 +28,6 @@ export class ChunkManager {
         return [...this.#loaded.values()].map(array => [...array]);
     }
 
-    #key(world, x, y) {
-        return `world/${world}.${x}.${y}.json`;
-    }
-
     /**
      * @param {number} world
      * @param {number} x
@@ -76,7 +72,7 @@ export class ChunkManager {
      */
 
     exists(world, x, y) {
-        return this.#queue.add(() => this.#storage.exists(this.#key(world, x, y)));
+        return this.#queue.add(() => this.#storage.exists(JSON.stringify([world, x, y])));
     }
 
     /**
@@ -89,7 +85,7 @@ export class ChunkManager {
 
     load(world, x, y, create) {
         return this.#queue.add(async () => {
-            const key = this.#key(world, x, y);
+            const key = JSON.stringify([world, x, y]);
             if (this.#loaded.has(key)) return;
             this.#loaded.set(key, [world, x, y]);
             const entities = await this.#storage.exists(key) ? await this.#storage.load(key) : create();
@@ -109,9 +105,11 @@ export class ChunkManager {
 
     save(world, x, y, unload = false) {
         return this.#queue.add(async () => {
-            const key = this.#key(world, x, y);
+            const key = JSON.stringify([world, x, y]);
 
-            if (!this.#loaded.has(key) && await this.#storage.exists(this.#key(world, x, y))) return;
+            // todo: should this throw an error for bad state?
+
+            if (!this.#loaded.has(key) && await this.#storage.exists(key)) return;
             const entities = this.search(world, x, y, this.#chunkSize, this.#chunkSize);
             await this.#storage.save(key, entities);
 
