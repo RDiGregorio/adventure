@@ -21,6 +21,14 @@ export class ChunkManager {
     }
 
     /**
+     * @return {number}
+     */
+
+    get chunkSize() {
+        return this.#chunkSize;
+    }
+
+    /**
      * @return {number[][]}
      */
 
