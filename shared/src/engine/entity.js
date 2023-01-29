@@ -1,5 +1,4 @@
 import {GameObject} from './game-object.js';
-import {newInstance} from "../util/instance.js";
 
 export class Entity extends GameObject {
     /**
