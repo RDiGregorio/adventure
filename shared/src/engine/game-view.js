@@ -22,7 +22,10 @@ export class GameView extends GameObject {
             for (let y = -1; y <= 1; y++) {
                 const size = this.#chunkManager.chunkSize;
                 await this.#chunkManager.load(this.#viewer.world, x * size, y * size);
-                this.#chunkManager.search(this.#viewer.world, x * size, y * size)
+
+                this
+                    .#chunkManager
+                    .search(this.#viewer.world, x * size, y * size, size, size)
                     .forEach(entity => entities.set(entity.id, entity));
             }
 
