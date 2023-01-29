@@ -106,17 +106,12 @@ export class ChunkManager {
     save(world, x, y, unload = false) {
         return this.#queue.add(async () => {
             const key = JSON.stringify([world, x, y]);
-
-            // todo: should this throw an error for bad state?
-
-            if (!this.#loaded.has(key) && await this.#storage.exists(key)) return;
+            if (!this.#loaded.has(key)) return;
             const entities = this.search(world, x, y, this.#chunkSize, this.#chunkSize);
             await this.#storage.save(key, entities);
-
-            if (unload) {
-                this.#loaded.delete(key);
-                entities.forEach(entity => this.delete(entity));
-            }
+            if (!unload) return;
+            this.#loaded.delete(key);
+            entities.forEach(entity => this.delete(entity));
         });
     }
 }

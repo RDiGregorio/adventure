@@ -1,9 +1,9 @@
 import {Storage, mockExists, mockLoad, mockSave} from 'shared/src/util/storage.js';
 import {jsonReplacer, jsonReviver} from 'shared/src/util/json.js';
-import {ChunkManager} from 'shared/src/game/chunk-manager.js';
-import {Entity} from 'shared/src/game/entity.js';
+import {ChunkManager} from 'shared/src/engine/chunk-manager.js';
+import {Entity} from 'shared/src/engine/entity.js';
 import {random} from 'shared/src/util/math.js';
-import {GameObject} from "shared/src/game/game-object.js";
+import {GameObject} from "shared/src/engine/game-object.js";
 
 // the "game" folder should really be named "engine"
 
@@ -18,4 +18,7 @@ await manager.load(0, 0, 0, () => {
     return result;
 });
 
-console.log(GameObject.prototype instanceof GameObject);
+console.log(manager.chunks);
+await manager.save(0, 0, 0, true);
+console.log(manager.chunks);
+await manager.save(0, 0, 0, true);
