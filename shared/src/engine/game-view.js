@@ -22,6 +22,9 @@ class GameView extends GameObject {
     }
 
     async update() {
-        //
+        for (let x = -1; x <= 1; y++)
+            for (let y = -1; y <= 1; y++) {
+                // await this.#chunkManager.load(x * this.#chunkManager.chunkSize)
+            }
     }
 }

@@ -9,15 +9,18 @@ export class ChunkManager {
     #spaces = new Map();
     #chunkSize;
     #storage;
+    #create;
 
     /**
      * @param {number} chunkSize
      * @param {Storage} storage
+     * @param {function(): Entity[]} create
      */
 
-    constructor(chunkSize, storage) {
+    constructor(chunkSize, storage, create) {
         this.#chunkSize = chunkSize;
         this.#storage = storage;
+        this.#create = create;
     }
 
     /**
@@ -87,16 +90,15 @@ export class ChunkManager {
      * @param {number} world
      * @param {number} x
      * @param {number} y
-     * @param {function(): Entity[]} create
      * @return {Promise<void>}
      */
 
-    load(world, x, y, create) {
+    load(world, x, y) {
         return this.#queue.add(async () => {
             const key = JSON.stringify([world, x, y]);
             if (this.#loaded.has(key)) return;
             this.#loaded.set(key, [world, x, y]);
-            const entities = await this.#storage.exists(key) ? await this.#storage.load(key) : create();
+            const entities = await this.#storage.exists(key) ? await this.#storage.load(key) : this.#create();
 
             for (const entity of entities)
                 this.add(entity, entity.world, entity.x, entity.y);

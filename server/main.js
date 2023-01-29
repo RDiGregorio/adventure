@@ -6,16 +6,20 @@ import {random} from 'shared/src/util/math.js';
 
 // chunk manager is specific enough to the game to use entities
 
-const manager = new ChunkManager(100, new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer));
+const manager = new ChunkManager(
+    100,
+    new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer),
+    () => {
+        const result = [];
 
-await manager.load(0, 0, 0, () => {
-    const result = [];
+        for (let i = 0; i < 10; i++)
+            result.push(new Entity(0, random(100), random(100)));
 
-    for (let i = 0; i < 10; i++)
-        result.push(new Entity(0, random(100), random(100)));
+        return result;
+    }
+);
 
-    return result;
-});
+await manager.load(0, 0, 0);
 
 console.log(manager.loadedChunkLocations);
 await manager.save(0, 0, 0, true);
