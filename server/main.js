@@ -21,3 +21,17 @@ console.log(manager.loadedChunkLocations);
 await manager.save(0, 0, 0, true);
 console.log(manager.loadedChunkLocations);
 await manager.save(0, 0, 0, true);
+
+const a = new Map(), b = new Map();
+a.set('x', 0);
+a.set('y', 0);
+b.set('x', 0);
+a.set('a', 0);
+
+function replaceWith(left, right) {
+    for (const key of left.keys())
+        if (!right.has(key)) left.delete(key);
+
+    for (const [key, value] of right)
+        left.set(key, value);
+}
