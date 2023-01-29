@@ -136,4 +136,13 @@ export class GameObject extends Map {
         this.dispatchEvent(new GameEvent('update', [key], value));
         return this;
     }
+
+    /**
+     * @param {Map<string, *>} other
+     */
+
+    sync(other) {
+        [...this.keys()].filter(key => !other.has(key)).forEach(key => this.delete(key));
+        [...other].forEach(entry => this.set(...entry));
+    }
 }
