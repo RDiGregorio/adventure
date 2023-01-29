@@ -31,7 +31,6 @@ export class Space {
 
     add(value, x, y) {
         this.delete(value);
-        if (!_.isFinite(x) || !_.isFinite(y)) return;
         this.#map.set(this.#identity(value), [x, y]);
         this.#rTree.insert({x: x, y: y, w: 0, h: 0}, value);
     }
