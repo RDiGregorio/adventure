@@ -13,7 +13,6 @@ const chunkSize = 25;
 export default class App extends React.Component {
     constructor(properties) {
         super(properties);
-        this.state = {data: ''};
         this.#init();
     }
 
@@ -28,8 +27,8 @@ export default class App extends React.Component {
             ))
         );
 
-        const entity = new Entity(0, 0, 0);
-        const gameView = new GameView(entity, chunkManager);
+        const viewer = new Entity(0, 0, 0);
+        const gameView = new GameView(viewer, chunkManager);
         await chunkManager.load(0, 0, 0);
         await gameView.load();
 
