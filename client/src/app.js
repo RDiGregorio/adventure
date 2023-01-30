@@ -28,7 +28,7 @@ export default class App extends React.Component {
         );
 
         const viewer = new Entity(0, 0, 0);
-        const gameView = new GameView(viewer, chunkManager);
+        const gameView = new GameView(viewer, chunkManager, null);
         await chunkManager.load(0, 0, 0);
         await gameView.load();
 
