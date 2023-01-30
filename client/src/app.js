@@ -3,13 +3,12 @@ import './app.css';
 import React from 'react';
 import {GameView} from 'shared/src/engine/game-view';
 import {Entity} from 'shared/src/engine/entity';
-import {ChunkManager} from "shared/src/engine/chunk-manager";
+import {ChunkManager} from 'shared/src/engine/chunk-manager';
 import {mockExists, mockLoad, mockSave, Storage} from 'shared/src/util/storage';
-import {jsonReplacer, jsonReviver, registerJsonReplacer} from 'shared/src/util/json';
+import {jsonReplacer, jsonReviver} from 'shared/src/util/json';
 import {random} from 'shared/src/util/math';
-import {GameObject} from 'shared/src/engine/game-object';
 
-const chunkSize = 50;
+const chunkSize = 25;
 
 export default class App extends React.Component {
     constructor(properties) {
@@ -36,18 +35,16 @@ export default class App extends React.Component {
 
         gameView.forEach(entity => {
             const element = document.querySelector(`#tile-${entity.x}-${entity.y}`);
-            if (element) element.textContent = '@';
+            if (element) element.textContent = '🐉';
         });
-
-        // registerJsonReplacer(GameObject.jsonReplacer);
-        // const data = JSON.stringify(gameView, jsonReplacer);
-        // this.setState({data: data});
     }
 
     #tiles(width, height) {
-        return _.range(height).map(y => <div className="tile-container">{_.range(width).map(x => {
+        let key = 0;
+
+        return _.range(height).map(y => <div className="tile-container" key={key++}>{_.range(width).map(x => {
             const id = `tile-${x}-${y}`;
-            return <span className="tile" id={id}></span>;
+            return <span className="tile" id={id} key={key++}></span>;
         })}</div>);
     }
 
