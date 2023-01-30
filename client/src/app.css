@@ -2,6 +2,10 @@
     font-family: 'Noto Emoji', sans-serif;
 }
 
+body {
+    background-color: black;
+}
+
 .tile-container {
     font-size: 0;
     white-space: nowrap;
@@ -10,7 +14,7 @@
 .tile {
     color: red;
     font-size: 16px;
-    border: 1px solid black;
+    border: 1px solid white;
     display: inline-block;
     width: 20px;
     height: 20px;
