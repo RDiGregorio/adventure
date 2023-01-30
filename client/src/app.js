@@ -43,7 +43,7 @@ export default class App extends React.Component {
 
         return _.range(height).map(y => <div className="tile-container" key={key++}>{_.range(width).map(x => {
             const id = `tile-${x}-${y}`;
-            return <span className="tile" id={id} key={key++}></span>;
+            return <div className="tile" id={id} key={key++}></div>;
         })}</div>);
     }
 
