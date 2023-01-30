@@ -3,16 +3,19 @@ import {GameObject} from './game-object.js';
 export class GameView extends GameObject {
     #viewer;
     #chunkManager;
+    #playerManager;
 
     /**
      * @param {Entity} viewer
      * @param {ChunkManager} chunkManager
+     * @param {PlayerManager} playerManager
      */
 
-    constructor(viewer, chunkManager) {
+    constructor(viewer, chunkManager, playerManager) {
         super();
         this.#viewer = viewer;
         this.#chunkManager = chunkManager;
+        this.#playerManager = playerManager;
     }
 
     async load() {
