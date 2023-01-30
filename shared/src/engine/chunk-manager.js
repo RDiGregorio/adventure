@@ -14,7 +14,7 @@ export class ChunkManager {
     /**
      * @param {number} chunkSize
      * @param {Storage} storage
-     * @param {function(): Entity[]} create
+     * @param {function(number, number, number): Entity[]} create
      */
 
     constructor(chunkSize, storage, create) {
@@ -98,7 +98,10 @@ export class ChunkManager {
             const key = JSON.stringify([world, x, y]);
             if (this.#loaded.has(key)) return;
             this.#loaded.set(key, [world, x, y]);
-            const entities = await this.#storage.exists(key) ? await this.#storage.load(key) : this.#create();
+
+            const entities = await this.#storage.exists(key)
+                ? await this.#storage.load(key)
+                : this.#create(world, x, y);
 
             for (const entity of entities)
                 this.add(entity, entity.world, entity.x, entity.y);

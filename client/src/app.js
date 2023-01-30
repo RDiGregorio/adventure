@@ -9,6 +9,8 @@ import {jsonReplacer, jsonReviver, registerJsonReplacer} from 'shared/src/util/j
 import {random} from 'shared/src/util/math';
 import {GameObject} from 'shared/src/engine/game-object';
 
+const chunkSize = 50;
+
 export default class App extends React.Component {
     constructor(properties) {
         super(properties);
@@ -18,28 +20,38 @@ export default class App extends React.Component {
 
     async #init() {
         const chunkManager = new ChunkManager(
-            100,
+            chunkSize,
             new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer),
-            () => _.range(5).map(() => new Entity(0, random(100), random(100)))
+            (world, x, y) => _.range(5).map(() => new Entity(
+                world,
+                x + random(chunkSize),
+                y + random(chunkSize)
+            ))
         );
 
         const entity = new Entity(0, 0, 0);
         const gameView = new GameView(entity, chunkManager);
         await chunkManager.load(0, 0, 0);
         await gameView.load();
-        registerJsonReplacer(GameObject.jsonReplacer);
-        const data = JSON.stringify(gameView, jsonReplacer);
-        this.setState({data: data});
+
+        gameView.forEach(entity => {
+            const element = document.querySelector(`#tile-${entity.x}-${entity.y}`);
+            if (element) element.textContent = '@';
+        });
+
+        // registerJsonReplacer(GameObject.jsonReplacer);
+        // const data = JSON.stringify(gameView, jsonReplacer);
+        // this.setState({data: data});
     }
 
     #tiles(width, height) {
-        return _.range(height).map(y => <div>{_.range(width).map(x => {
+        return _.range(height).map(y => <div className="tile-container">{_.range(width).map(x => {
             const id = `tile-${x}-${y}`;
-            return <span id={id}>[{x}, {y}]</span>;
+            return <span className="tile" id={id}></span>;
         })}</div>);
     }
 
     render() {
-        return <div className="noto-emoji">{this.#tiles(10, 10)}</div>
+        return <div className="noto-emoji">{this.#tiles(chunkSize, chunkSize)}</div>
     }
 }

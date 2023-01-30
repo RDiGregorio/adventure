@@ -1,3 +1,18 @@
 .noto-emoji {
     font-family: 'Noto Emoji', sans-serif;
 }
+
+.tile-container {
+    font-size: 0;
+    white-space: nowrap;
+}
+
+.tile {
+    font-size: 16px;
+    border: 1px solid black;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+    margin: 1px;
+}
