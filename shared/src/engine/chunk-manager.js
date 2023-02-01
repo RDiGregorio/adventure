@@ -83,7 +83,10 @@ export class ChunkManager {
      */
 
     exists(world, x, y) {
-        return this.#queue.add(() => this.#storageAdapter.exists(JSON.stringify([world, x, y])));
+        return this.#queue.add(() => {
+            const key = JSON.stringify([world, x, y]);
+            return this.#loaded.has(key) || this.#storageAdapter.exists(key);
+        });
     }
 
     /**

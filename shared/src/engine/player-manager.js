@@ -1,4 +1,10 @@
+import {Queue} from '../util/queue.js';
+
+// TODO: really need to think about this. probably want a space here, too.
+
 class PlayerManager {
+    #queue = new Queue();
+    #loaded = new Map();
     #storageAdapter;
     #create;
 
