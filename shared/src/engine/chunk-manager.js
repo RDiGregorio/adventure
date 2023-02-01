@@ -1,6 +1,6 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {Storage} from '../util/storage.js';
+import {StorageAdapter} from '../util/storage-adapter.js';
 import {Queue} from '../util/queue.js';
 
 export class ChunkManager {
@@ -8,18 +8,18 @@ export class ChunkManager {
     #loaded = new Map();
     #spaces = new Map();
     #chunkSize;
-    #storage;
+    #storageAdapter;
     #create;
 
     /**
      * @param {number} chunkSize
-     * @param {Storage} storage
+     * @param {StorageAdapter} storageAdapter
      * @param {function(number, number, number): Entity[]} create
      */
 
-    constructor(chunkSize, storage, create) {
+    constructor(chunkSize, storageAdapter, create) {
         this.#chunkSize = chunkSize;
-        this.#storage = storage;
+        this.#storageAdapter = storageAdapter;
         this.#create = create;
     }
 
@@ -83,7 +83,7 @@ export class ChunkManager {
      */
 
     exists(world, x, y) {
-        return this.#queue.add(() => this.#storage.exists(JSON.stringify([world, x, y])));
+        return this.#queue.add(() => this.#storageAdapter.exists(JSON.stringify([world, x, y])));
     }
 
     /**
@@ -99,8 +99,8 @@ export class ChunkManager {
             if (this.#loaded.has(key)) return;
             this.#loaded.set(key, [world, x, y]);
 
-            const entities = await this.#storage.exists(key)
-                ? await this.#storage.load(key)
+            const entities = await this.#storageAdapter.exists(key)
+                ? await this.#storageAdapter.load(key)
                 : this.#create(world, x, y);
 
             for (const entity of entities)
@@ -121,7 +121,7 @@ export class ChunkManager {
             const key = JSON.stringify([world, x, y]);
             if (!this.#loaded.has(key)) return;
             const entities = this.search(world, x, y, this.#chunkSize, this.#chunkSize);
-            await this.#storage.save(key, entities);
+            await this.#storageAdapter.save(key, entities);
             if (!unload) return;
             this.#loaded.delete(key);
             entities.forEach(entity => this.delete(entity));

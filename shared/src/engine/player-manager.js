@@ -1,14 +1,14 @@
 class PlayerManager {
-    #storage;
+    #storageAdapter;
     #create;
 
     /**
-     * @param {Storage} storage
+     * @param {StorageAdapter} storageAdapter
      * @param {function(): Player} create
      */
 
-    constructor(storage, create) {
-        this.#storage = storage;
+    constructor(storageAdapter, create) {
+        this.#storageAdapter = storageAdapter;
         this.#create = create;
     }
 

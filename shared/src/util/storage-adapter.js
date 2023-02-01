@@ -30,7 +30,7 @@ export async function mockSave(key, value) {
     mockDatabase.set(key, value);
 }
 
-export class Storage {
+export class StorageAdapter {
     #queue = new Queue();
     #exists;
     #load;
