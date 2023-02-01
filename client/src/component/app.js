@@ -19,7 +19,7 @@ export default class App extends React.Component {
     async #init() {
         const chunkManager = new ChunkManager(
             chunkSize,
-            new StorageAdapter(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer),
+            new StorageAdapter('chunk', mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer),
             (world, x, y) => _.range(5).map(() => new Entity(
                 world,
                 x + random(chunkSize),
