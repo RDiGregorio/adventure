@@ -3,35 +3,40 @@ import {Queue} from './queue.js';
 export const mockDatabase = new Map();
 
 /**
+ * @param {string} location
  * @param {string} key
  * @return {Promise<boolean>}
  */
 
-export async function mockExists(key) {
-    return mockDatabase.has(key);
+export async function mockExists(location, key) {
+    return mockDatabase.get(location)?.has(key) ?? false;
 }
 
 /**
+ * @param {string} location
  * @param {string} key
  * @return {Promise<*>}
  */
 
-export async function mockLoad(key) {
-    return mockDatabase.get(key);
+export async function mockLoad(location, key) {
+    return mockDatabase.get(location)?.get(key);
 }
 
 /**
+ * @param {string} location
  * @param {string} key
  * @param {*} value
  * @return {Promise<void>}
  */
 
-export async function mockSave(key, value) {
-    mockDatabase.set(key, value);
+export async function mockSave(location, key, value) {
+    if (!mockDatabase.has(location)) mockDatabase.set(location, new Map());
+    mockDatabase.get(location).set(key, value);
 }
 
 export class StorageAdapter {
     #queue = new Queue();
+    #location;
     #exists;
     #load;
     #save;
@@ -39,14 +44,16 @@ export class StorageAdapter {
     #replacer;
 
     /**
-     * @param {function(string): Promise<boolean>} exists
-     * @param {function(string): Promise<*>} load
-     * @param {function(string, *): Promise<void>} save
+     * @param {string} location
+     * @param {function(string, string): Promise<boolean>} exists
+     * @param {function(string, string): Promise<*>} load
+     * @param {function(string, string, *): Promise<void>} save
      * @param {function(string, *): *} reviver
      * @param {function(string, *): *} replacer
      */
 
-    constructor(exists, load, save, reviver, replacer) {
+    constructor(location, exists, load, save, reviver, replacer) {
+        this.#location = location;
         this.#exists = exists;
         this.#load = load;
         this.#save = save;
@@ -60,7 +67,7 @@ export class StorageAdapter {
      */
 
     exists(key) {
-        return this.#queue.add(() => this.#exists(key));
+        return this.#queue.add(() => this.#exists(this.#location, key));
     }
 
     /**
@@ -69,7 +76,7 @@ export class StorageAdapter {
      */
 
     load(key) {
-        return this.#queue.add(async () => JSON.parse(await this.#load(key), this.#reviver));
+        return this.#queue.add(async () => JSON.parse(await this.#load(this.#location, key), this.#reviver));
     }
 
     /**
@@ -79,6 +86,6 @@ export class StorageAdapter {
      */
 
     save(key, value) {
-        return this.#queue.add(() => this.#save(key, JSON.stringify(value, this.#replacer)));
+        return this.#queue.add(() => this.#save(this.#location, key, JSON.stringify(value, this.#replacer)));
     }
 }
