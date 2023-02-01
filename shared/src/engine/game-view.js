@@ -30,6 +30,12 @@ export class GameView extends GameObject {
                     .#chunkManager
                     .search(this.#viewer.world, x * size, y * size, size, size)
                     .forEach(entity => entities.set(entity.id, entity));
+
+                this
+                    .#playerManager
+                    .search(this.#viewer.world, x * size, y * size, size, size)
+                    .map(player => player.entity)
+                    .forEach(entity => entities.set(entity.id, entity));
             }
 
         this.sync(entities);
