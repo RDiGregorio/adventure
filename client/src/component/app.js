@@ -4,7 +4,7 @@ import React from 'react';
 import {GameView} from 'shared/src/engine/game-view';
 import {Entity} from 'shared/src/engine/entity';
 import {ChunkManager} from 'shared/src/engine/chunk-manager';
-import {mockExists, mockLoad, mockSave, Storage} from 'shared/src/util/storage';
+import {mockExists, mockLoad, mockSave, StorageAdapter} from 'shared/src/util/storage-adapter';
 import {jsonReplacer, jsonReviver} from 'shared/src/util/json';
 import {random} from 'shared/src/util/math';
 
@@ -19,7 +19,7 @@ export default class App extends React.Component {
     async #init() {
         const chunkManager = new ChunkManager(
             chunkSize,
-            new Storage(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer),
+            new StorageAdapter(mockExists, mockLoad, mockSave, jsonReviver, jsonReplacer),
             (world, x, y) => _.range(5).map(() => new Entity(
                 world,
                 x + random(chunkSize),
