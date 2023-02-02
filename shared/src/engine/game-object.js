@@ -5,12 +5,17 @@ import {uuid} from '../util/uuid.js';
 import {isJsonPrimitive, isJsonPrimitiveArray} from '../util/json.js';
 import {getRegisteredClass, newInstance} from '../util/instance.js';
 
+/**
+ * An object with events and a universally unique identifier. Supports JSON encoding and decoding.
+ */
+
 export class GameObject extends Map {
     #eventListeners = new Map();
     #id = uuid();
     #parentKeys = new MultiMap();
 
     /**
+     * A universally unique identifier.
      * @return {string}
      */
 
@@ -19,6 +24,7 @@ export class GameObject extends Map {
     }
 
     /**
+     * A universally unique identifier.
      * @param {string} string
      */
 
@@ -27,6 +33,7 @@ export class GameObject extends Map {
     }
 
     /**
+     * A replacer for ending a `GameObject` with `JSON.stringify`.
      * @param {string} key
      * @param {*} value
      * @return {*}
@@ -42,6 +49,7 @@ export class GameObject extends Map {
     }
 
     /**
+     * A reviver for decoding a `GameObject` with `JSON.parse`.
      * @param {string} key
      * @param {*} value
      * @return {*}
@@ -66,6 +74,7 @@ export class GameObject extends Map {
     }
 
     /**
+     * Adds `callback` as an event listener. Returns a string for `removeEventListener`.
      * @param {function(GameEvent): void} callback
      * @return {string}
      */
@@ -76,11 +85,16 @@ export class GameObject extends Map {
         return key;
     }
 
+    /**
+     * Deletes each entry.
+     */
+
     clear() {
         this.keys().forEach(this.delete);
     }
 
     /**
+     * Deletes the entry for `key`.
      * @param {string} key
      * @return {boolean}
      */
@@ -92,6 +106,7 @@ export class GameObject extends Map {
     }
 
     /**
+     * Dispatches `event` to each event listener.
      * @param {GameEvent} event
      */
 
@@ -103,14 +118,16 @@ export class GameObject extends Map {
     }
 
     /**
-     * @param {string[]} keys
+     * Returns a value. Returns a nested value if `key` is a string.
+     * @param {string|string[]} key
      */
 
-    getPath(keys) {
-        return keys.reduce((result, key) => result.get(key), this);
+    get(key) {
+        return Array.isArray(key) ? key.reduce((result, key) => result?.get(key), this) : super.get(key);
     }
 
     /**
+     * Removes an event listener using a string from `addEventListener`.
      * @param {string} key
      */
 
@@ -119,6 +136,7 @@ export class GameObject extends Map {
     }
 
     /**
+     * Assigns a value as a `GameObject`, JSON primitive, or array of JSON primitives.
      * @param {string} key
      * @param {*} value
      */
@@ -140,6 +158,7 @@ export class GameObject extends Map {
     }
 
     /**
+     * Replaces each entry with the entries of `other`.
      * @param {Map<string, *>} other
      */
 

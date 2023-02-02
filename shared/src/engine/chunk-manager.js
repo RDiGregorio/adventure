@@ -51,7 +51,6 @@ export class ChunkManager {
     search(world, x, y, width, height) {
         return this.#spaces.get(world)?.search(x, y, width, height) ?? [];
     }
-
     /**
      * @param {Entity} entity
      * @param {number} world
