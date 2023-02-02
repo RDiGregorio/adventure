@@ -1,5 +1,10 @@
+/**
+ * A map with multiple values per key.
+ */
+
 export class MultiMap extends Map {
     /**
+     * Returns the number of entries.
      * @return {number}
      */
 
@@ -8,6 +13,7 @@ export class MultiMap extends Map {
     }
 
     /**
+     * Returns each entry.
      * @return {Iterable<[*, *]>}
      */
 
@@ -18,6 +24,7 @@ export class MultiMap extends Map {
     }
 
     /**
+     * Deletes an entry. Returns true if the entry existed.
      * @param {*} key
      * @param {*} value
      * @return {boolean}
@@ -32,6 +39,7 @@ export class MultiMap extends Map {
     }
 
     /**
+     * Returns each entry.
      * @return {Iterable<[*, *]>}
      */
 
@@ -42,6 +50,7 @@ export class MultiMap extends Map {
     }
 
     /**
+     * Calls `callback` with each entry.
      * @param {function(*, *, MultiMap)} callback
      * @param {*} self
      */
@@ -53,6 +62,7 @@ export class MultiMap extends Map {
     }
 
     /**
+     * Returns a value.
      * @param {*} key
      * @return {Iterable<*>}
      */
@@ -64,6 +74,7 @@ export class MultiMap extends Map {
     }
 
     /**
+     * Assigns a value.
      * @param {*} key
      * @param {*} value
      * @return {MultiMap}
@@ -76,6 +87,7 @@ export class MultiMap extends Map {
     }
 
     /**
+     * Returns each value.
      * @return {Iterable<*>}
      */
 
