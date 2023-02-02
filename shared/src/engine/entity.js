@@ -1,5 +1,7 @@
 import {GameObject} from './game-object.js';
 
+// A `GameObject` with a spatial location.
+
 export class Entity extends GameObject {
     /**
      * @param {string} type
