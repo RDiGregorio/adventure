@@ -6,7 +6,7 @@ import {isJsonPrimitive, isJsonPrimitiveArray} from '../util/json.js';
 import {getRegisteredClass, newInstance} from '../util/instance.js';
 
 /**
- * An object with events and a universally unique identifier. Supports JSON encoding and decoding.
+ * A map with events and an id. Supports JSON encoding and decoding.
  */
 
 export class GameObject extends Map {
@@ -15,7 +15,7 @@ export class GameObject extends Map {
     #parentKeys = new MultiMap();
 
     /**
-     * A universally unique identifier.
+     * Returns an id.
      * @return {string}
      */
 
@@ -24,7 +24,7 @@ export class GameObject extends Map {
     }
 
     /**
-     * A universally unique identifier.
+     * Assigns an id.
      * @param {string} string
      */
 
@@ -33,7 +33,7 @@ export class GameObject extends Map {
     }
 
     /**
-     * A replacer for ending a `GameObject` with `JSON.stringify`.
+     * A replacer for encoding a `GameObject` with `JSON.stringify`.
      * @param {string} key
      * @param {*} value
      * @return {*}
@@ -136,7 +136,7 @@ export class GameObject extends Map {
     }
 
     /**
-     * Assigns a value as a `GameObject`, JSON primitive, or array of JSON primitives.
+     * Creates an entry with a `GameObject`, JSON primitive, or array of JSON primitives as a value.
      * @param {string} key
      * @param {*} value
      */

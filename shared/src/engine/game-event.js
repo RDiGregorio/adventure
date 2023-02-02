@@ -1,3 +1,7 @@
+/**
+ * An event for a `GameObject`.
+ */
+
 export class GameEvent {
     #type;
     #path;
@@ -16,6 +20,7 @@ export class GameEvent {
     }
 
     /**
+     * Returns a path to the event source.
      * @return {string[]}
      */
 
@@ -24,6 +29,7 @@ export class GameEvent {
     }
 
     /**
+     * Returns the event type.
      * @return {string}
      */
 
@@ -32,6 +38,7 @@ export class GameEvent {
     }
 
     /**
+     * Returns the event value.
      * @return {*}
      */
 
@@ -40,6 +47,7 @@ export class GameEvent {
     }
 
     /**
+     * A replacer for ending a `GameEvent` with `JSON.stringify`.
      * @param {string} key
      * @param {*} value
      * @return {*}
@@ -52,6 +60,7 @@ export class GameEvent {
     }
 
     /**
+     * A reviver for decoding a `GameEvent` with `JSON.parse`.
      * @param {string} key
      * @param {*} value
      * @return {*}
@@ -62,6 +71,7 @@ export class GameEvent {
     }
 
     /**
+     * TODO: move this somewhere else
      * @param {string[]} array
      * @return {boolean}
      */
