@@ -1,6 +1,10 @@
 import {uuid} from '../util/uuid.js';
 import {EventfulMap} from '../map/eventful-map.js';
 
+/**
+ * An `EventfulMap` with an id, type, and location.
+ */
+
 export class Entity extends EventfulMap {
     /**
      * @param {string} type
@@ -15,6 +19,7 @@ export class Entity extends EventfulMap {
     }
 
     /**
+     * Returns an id.
      * @return {string}
      */
 
@@ -23,6 +28,7 @@ export class Entity extends EventfulMap {
     }
 
     /**
+     * Returns a type.
      * @return {string}
      */
 
@@ -31,6 +37,7 @@ export class Entity extends EventfulMap {
     }
 
     /**
+     * Returns a world number.
      * @return {number}
      */
 
@@ -39,6 +46,7 @@ export class Entity extends EventfulMap {
     }
 
     /**
+     * Returns an x coordinate.
      * @return {number}
      */
 
@@ -47,6 +55,7 @@ export class Entity extends EventfulMap {
     }
 
     /**
+     * Returns a y coordinate.
      * @return {number}
      */
 
