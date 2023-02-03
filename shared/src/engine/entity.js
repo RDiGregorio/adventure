@@ -4,22 +4,27 @@ import {EventfulMap} from '../map/eventful-map.js';
 export class Entity extends EventfulMap {
     /**
      * @param {string} type
-     * @param {number} world
-     * @param {number} x
-     * @param {number} y
      */
 
-    constructor(type, world, x, y) {
+    constructor(type) {
         super();
         this.set('id', uuid());
         this.set('type', type);
-        this.set('world', world);
-        this.set('location', [x, y]);
+        this.set('world', 0);
+        this.set('location', [0, 0]);
     }
+
+    /**
+     * @return {string}
+     */
 
     get id() {
         return this.get('id');
     }
+
+    /**
+     * @return {string}
+     */
 
     get type() {
         return this.get('type');
