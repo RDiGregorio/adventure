@@ -1,4 +1,4 @@
-import {registeredClass} from '../util/reflection.js';
+import {registeredClass} from '../util/reflect.js';
 
 /**
  * A map replacer for `JSON.stringify`.
