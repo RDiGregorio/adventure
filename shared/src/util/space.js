@@ -28,7 +28,7 @@ export class Space {
     }
 
     /**
-     * Adds a value.
+     * Adds a value and deletes previously added duplicates.
      * @param {*} value
      * @param {number} x
      * @param {number} y

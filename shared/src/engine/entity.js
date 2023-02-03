@@ -14,7 +14,7 @@ export class Entity extends ObservableMap {
         super();
         this.set('id', uuid());
         this.set('type', type);
-        this.set('world', 0);
+        this.set('world', '');
         this.set('location', [0, 0]);
     }
 
@@ -37,8 +37,8 @@ export class Entity extends ObservableMap {
     }
 
     /**
-     * Returns a world number.
-     * @return {number}
+     * Returns a world name.
+     * @return {string}
      */
 
     get world() {
