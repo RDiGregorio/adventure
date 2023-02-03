@@ -7,7 +7,7 @@ import {registeredClass} from '../util/reflection.js';
  * @return {*}
  */
 
-export function replace(key, value) {
+export function replaceMap(key, value) {
     return value instanceof Map ? {class: value.constructor.name, entries: [...value]} : value;
 }
 
@@ -18,7 +18,7 @@ export function replace(key, value) {
  * @return {*}
  */
 
-export function revive(key, value) {
+export function reviveMap(key, value) {
     const type = registeredClass(value?.class);
     return type === Map || type?.prototype instanceof Map ? new type(value.entries) : value;
 }
