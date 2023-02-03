@@ -1,5 +1,5 @@
 /**
- * An event for an `EventfulMap`.
+ * An event for an `ObservableMap`.
  */
 
 export class MapEvent {

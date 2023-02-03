@@ -1,11 +1,11 @@
 import {uuid} from '../util/uuid.js';
-import {EventfulMap} from '../map/eventful-map.js';
+import {ObservableMap} from '../map/observable-map.js';
 
 /**
- * An `EventfulMap` with an id, type, and location.
+ * An `ObservableMap` with an id, type, and location.
  */
 
-export class Entity extends EventfulMap {
+export class Entity extends ObservableMap {
     /**
      * @param {string} type
      */

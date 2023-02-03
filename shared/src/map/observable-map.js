@@ -6,7 +6,7 @@ import {uuid} from '../util/uuid.js';
  * A map with events. Dispatches an "update" event when modified.
  */
 
-export class EventfulMap extends Map {
+export class ObservableMap extends Map {
     #eventListeners = new Map();
     #parentKeys = new MultiMap();
 
@@ -74,17 +74,17 @@ export class EventfulMap extends Map {
     }
 
     /**
-     * Assigns a value. Assigning an undefined value deletes an entry. Returns the `EventfulMap`.
+     * Assigns a value. Assigning an undefined value deletes an entry. Returns the `ObservableMap`.
      * @param {string} key
      * @param {*} value
-     * @return {EventfulMap}
+     * @return {ObservableMap}
      */
 
     set(key, value) {
         if (this.get(key) === value) return this;
-        if (this.get(key) instanceof EventfulMap) this.get(key).#parentKeys.delete(this, key);
+        if (this.get(key) instanceof ObservableMap) this.get(key).#parentKeys.delete(this, key);
         value === undefined ? super.delete(key) : super.set(key, value);
-        if (value instanceof EventfulMap) value.#parentKeys.set(this, key);
+        if (value instanceof ObservableMap) value.#parentKeys.set(this, key);
         this.dispatchEvent(new MapEvent('update', [key], value));
         return this;
     }
