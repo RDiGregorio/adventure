@@ -1,7 +1,9 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {StorageAdapter} from '../storage/storage-adapter.js';
+import {StorageAdapter} from '../io/storage-adapter.js';
 import {Queue} from '../async/queue.js';
+
+// todo: abstract this to an entity manager; only save/load are different from player manager
 
 export class ChunkManager {
     #queue = new Queue();
@@ -51,6 +53,7 @@ export class ChunkManager {
     search(world, x, y, width, height) {
         return this.#spaces.get(world)?.search(x, y, width, height) ?? [];
     }
+
     /**
      * @param {Entity} entity
      * @param {number} world
