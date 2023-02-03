@@ -46,7 +46,7 @@ export class MapUtil {
         const type = this.#classes.get(value?.class);
 
         return type === Map || type?.prototype instanceof Map
-            ? MapUtil.assign(new type(), new Map(value.entries))
+            ? value.entries.reduce((result, entry) => result.set(...entry), new type())
             : value;
     }
 
