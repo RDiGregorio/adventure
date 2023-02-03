@@ -14,8 +14,6 @@ export class Entity extends ObservableMap {
         super();
         this.set('id', uuid());
         this.set('type', type);
-        this.set('world', '');
-        this.set('location', [0, 0]);
     }
 
     /**
@@ -51,7 +49,7 @@ export class Entity extends ObservableMap {
      */
 
     get x() {
-        return this.get('location')[0];
+        return this.has('location') ? this.get('location')[0] : undefined;
     }
 
     /**
@@ -60,6 +58,6 @@ export class Entity extends ObservableMap {
      */
 
     get y() {
-        return this.get('location')[1];
+        return this.has('location') ? this.get('location')[1] : undefined;
     }
 }
