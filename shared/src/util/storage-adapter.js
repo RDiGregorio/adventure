@@ -1,5 +1,7 @@
 import {Queue} from './queue.js';
 
+// TODO: simplify this
+
 export const mockDatabase = new Map();
 
 /**

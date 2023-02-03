@@ -1,12 +1,19 @@
 import {sleep} from "./async.js";
 
-// TODO: document this
+/**
+ * Periodically calls a function.
+ */
 
 export class Metronome {
     #running = true;
 
-    constructor(interval, callback) {
-        this.#run(interval, callback);
+    /**
+     * @param {number} milliseconds
+     * @param {function(): void} callback
+     */
+
+    constructor(milliseconds, callback) {
+        this.#run(milliseconds, callback);
     }
 
     async #run(interval, callback) {
@@ -17,6 +24,10 @@ export class Metronome {
             callback();
         }
     }
+
+    /**
+     * Stops the process.
+     */
 
     stop() {
         this.#running = false;
