@@ -5,5 +5,5 @@
  */
 
 export async function sleep(milliseconds) {
-    await new Promise(resolve => setTimeout(resolve, milliseconds));
+    await new Promise(resolve => setTimeout(resolve, Math.max(0, milliseconds)));
 }
