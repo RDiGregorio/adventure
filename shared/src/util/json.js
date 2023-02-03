@@ -1,9 +1,5 @@
 import _ from 'lodash';
 
-// TODO: simplify this
-
-const replacers = [], revivers = [];
-
 /**
  * Returns true if `value` is a JSON primitive.
  * @param {*} value
@@ -22,44 +18,4 @@ export function isJsonPrimitive(value) {
 
 export function isJsonPrimitiveArray(value) {
     return Array.isArray(value) && value.every(isJsonPrimitive);
-}
-
-/**
- * Registers `callback` for `jsonReplace`.
- * @param {function(string, *): *} callback
- */
-
-export function registerJsonReplacer(callback) {
-    replacers.push(callback);
-}
-
-/**
- * Registers `callback` for `jsonRevive`.
- * @param {function(string, *): *} callback
- */
-
-export function registerJsonReviver(callback) {
-    revivers.push(callback);
-}
-
-/**
- * A replacer for `JSON.stringify`.
- * @param {string} key
- * @param {*} value
- * @return {*}
- */
-
-export function jsonReplacer(key, value) {
-    return replacers.reduce((result, callback) => callback(key, result), value);
-}
-
-/**
- * A reviver for `JSON.parse`.
- * @param {string} key
- * @param {*} value
- * @return {*}
- */
-
-export function jsonReviver(key, value) {
-    return revivers.reduce((result, callback) => callback(key, result), value);
 }

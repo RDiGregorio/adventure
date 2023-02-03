@@ -1,4 +1,4 @@
-import {Queue} from './queue.js';
+import {Queue} from '../async/queue.js';
 
 // TODO: simplify this
 

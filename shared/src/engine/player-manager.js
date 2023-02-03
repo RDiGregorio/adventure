@@ -1,5 +1,5 @@
-import {Queue} from '../util/queue.js';
-import {Space} from "../util/space.js";
+import {Queue} from '../async/queue.js';
+import {Space} from '../util/space.js';
 
 // TODO: really need to think about this. probably want a space here, too.
 
