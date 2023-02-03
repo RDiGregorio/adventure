@@ -26,7 +26,7 @@ class EntityManager {
     }
 
     /**
-     * Deletes an entity from a world.
+     * Deletes an entity from all worlds.
      * @param {Entity} entity
      */
 
