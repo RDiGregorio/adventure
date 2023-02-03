@@ -1,5 +1,5 @@
 import {uuid} from '../util/uuid.js';
-import {ObservableMap} from '../map/observable-map.js';
+import {ObservableMap} from '../event/observable-map.js';
 
 /**
  * An `ObservableMap` with an id, type, and location.

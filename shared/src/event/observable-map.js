@@ -1,5 +1,5 @@
 import {MapEvent} from './map-event.js';
-import {MultiMap} from './multi-map.js';
+import {MultiMap} from '../util/multi-map.js';
 import {uuid} from '../util/uuid.js';
 
 /**

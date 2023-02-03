@@ -1,6 +1,6 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {StorageAdapter} from '../io/storage-adapter.js';
+import {StorageAdapter} from '../transport/storage-adapter.js';
 import {Queue} from '../async/queue.js';
 
 // todo: abstract this to an entity manager; only save/load are different from player manager
