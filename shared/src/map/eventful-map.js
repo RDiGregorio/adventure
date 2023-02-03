@@ -1,6 +1,6 @@
 import {MapEvent} from './map-event.js';
 import {MultiMap} from './multi-map.js';
-import {uuid} from './uuid.js';
+import {uuid} from '../util/uuid.js';
 
 /**
  * A map with events. Dispatches an "update" event when modified.

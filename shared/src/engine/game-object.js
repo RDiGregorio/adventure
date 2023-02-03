@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {GameEvent} from './game-event.js';
-import {MultiMap} from '../util/multi-map.js';
+import {MultiMap} from '../map/multi-map.js';
 import {uuid} from '../util/uuid.js';
 import {isJsonPrimitive, isJsonPrimitiveArray} from '../util/json.js';
 import {getRegisteredClass, newInstance} from '../util/instance.js';
