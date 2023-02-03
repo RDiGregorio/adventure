@@ -1,8 +1,7 @@
-import {GameObject} from './game-object.js';
+import {uuid} from '../util/uuid.js';
+import {EventfulMap} from '../map/eventful-map.js';
 
-// A `GameObject` with a spatial location.
-
-export class Entity extends GameObject {
+export class Entity extends EventfulMap {
     /**
      * @param {string} type
      * @param {number} world
@@ -12,9 +11,14 @@ export class Entity extends GameObject {
 
     constructor(type, world, x, y) {
         super();
+        this.set('id', uuid());
         this.set('type', type);
         this.set('world', world);
         this.set('location', [x, y]);
+    }
+
+    get id() {
+        return this.get('id');
     }
 
     get type() {
