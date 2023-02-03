@@ -1,6 +1,6 @@
 import {Entity} from './entity.js';
 import {Space} from '../util/space.js';
-import {StorageAdapter} from '../util/storage-adapter.js';
+import {StorageAdapter} from '../storage/storage-adapter.js';
 import {Queue} from '../async/queue.js';
 
 export class ChunkManager {
