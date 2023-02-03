@@ -1,7 +1,7 @@
 import {Space} from '../util/space.js';
 
 /**
- * Adds entities in worlds with fast spatial searching.
+ * Adds entities to worlds with fast spatial searching.
  */
 
 class EntityManager {
