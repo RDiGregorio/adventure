@@ -12,7 +12,7 @@ export class EventfulMap extends Map {
 
     /**
      * Adds an event listener. Returns a string for `removeEventListener`.
-     * @param {function(event: MapEvent): void} callback
+     * @param {function(MapEvent): void} callback
      * @return {string}
      */
 

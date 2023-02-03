@@ -1,5 +1,7 @@
 import {sleep} from "./async.js";
 
+// TODO: document this
+
 export class Metronome {
     #running = true;
 

@@ -1,3 +1,5 @@
+// TODO: simplify this
+
 const classes = new Map();
 
 /**

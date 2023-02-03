@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+// TODO: simplify this
+
 const replacers = [], revivers = [];
 
 /**

@@ -1,5 +1,8 @@
-import _ from 'lodash';
 import RTree from 'rtree';
+
+/**
+ * A collection of spatial objects.
+ */
 
 export class Space {
     #rTree = new RTree();
@@ -15,15 +18,17 @@ export class Space {
     }
 
     /**
+     * Returns each value.
      * @return {*[]}
      */
 
-    toList() {
+    toArray() {
         const x = this.#rTree.root.x, y = this.#rTree.root.y;
         return this.#rTree.bbox(x, y, x + this.#rTree.root.w, y + this.#rTree.root.h);
     }
 
     /**
+     * Adds a value.
      * @param {*} value
      * @param {number} x
      * @param {number} y
@@ -36,6 +41,7 @@ export class Space {
     }
 
     /**
+     * Deletes a value.
      * @param {*} value
      */
 
@@ -52,6 +58,7 @@ export class Space {
     }
 
     /**
+     * Returns each value in a rectangle.
      * @param {number} x
      * @param {number} y
      * @param {number} width
