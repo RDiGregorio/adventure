@@ -1,7 +1,7 @@
 import RTree from 'rtree';
 
 /**
- * A collection of spatial objects.
+ * A collection of spatial objects with fast spatial searching.
  */
 
 export class Space {
