@@ -1,4 +1,4 @@
-import {toClass} from '../util/reflection.js';
+import {registeredClass} from '../util/reflection.js';
 
 /**
  * A map replacer for `JSON.stringify`.
@@ -12,13 +12,13 @@ export function replace(key, value) {
 }
 
 /**
- * A map reviver for `JSON.parse`.
+ * A map reviver for `JSON.parse` using map classes registered with `registerClass`.
  * @param {string} key
  * @param {*} value
  * @return {*}
  */
 
 export function revive(key, value) {
-    const type = toClass(value?.class);
+    const type = registeredClass(value?.class);
     return type === Map || type?.prototype instanceof Map ? new type(value.entries) : value;
 }
