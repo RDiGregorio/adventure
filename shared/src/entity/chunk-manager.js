@@ -1,7 +1,7 @@
 import {Queue} from '../async/queue.js';
 
 /**
- * Saves and loads chunks of entities.
+ * Saves and loads chunks of entities in an `EntitySpace` using a `StorageAdapter`.
  */
 
 export class ChunkManager {
