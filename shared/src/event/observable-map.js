@@ -88,14 +88,4 @@ export class ObservableMap extends Map {
         this.dispatchEvent(new MapEvent('update', [key], value));
         return this;
     }
-
-    /**
-     * Replaces each entry with the entries of `other`.
-     * @param {Map<string, *>} other
-     */
-
-    sync(other) {
-        [...this.keys()].filter(key => !other.has(key)).forEach(key => this.delete(key));
-        [...other].forEach(entry => this.set(...entry));
-    }
 }
