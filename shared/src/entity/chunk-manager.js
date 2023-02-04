@@ -75,8 +75,6 @@ export class ChunkManager {
      */
 
     async search(world, x, y) {
-        console.log(this.#entitySpace.toArray());
-
         const result = [];
 
         for (let i = -1; i <= 1; i++)
