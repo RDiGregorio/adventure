@@ -17,3 +17,14 @@ export function hex(number) {
 export function random(number = 2 ** 32) {
     return Math.floor(Math.random() * number);
 }
+
+/**
+ * Rounds `number` down to the nearest multiple of `step`.
+ * @param number
+ * @param step
+ * @return {number}
+ */
+
+export function round(number, step) {
+    return Math.floor(number / step) * step;
+}

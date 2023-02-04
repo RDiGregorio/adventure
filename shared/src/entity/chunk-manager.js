@@ -102,4 +102,8 @@ export class ChunkManager {
             entities.forEach(entity => this.#entitySpace.delete(entity));
         });
     }
+
+    search(world, x, y, width, height) {
+        // can probably hide "load"
+    }
 }

@@ -1,5 +1,3 @@
-import {GameObject} from './game-object.js';
-
 export class GameView extends GameObject {
     #viewer;
     #chunkManager;
