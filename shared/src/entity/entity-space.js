@@ -46,4 +46,13 @@ export class EntitySpace {
     search(world, x, y, width, height) {
         return this.#spaces.get(world)?.search(x, y, width, height) ?? [];
     }
+
+    /**
+     * Returns each entity.
+     * @return {Entity[]}
+     */
+
+    toArray() {
+        return [...this.#spaces.values()].flatMap(space => space.toArray());
+    }
 }
