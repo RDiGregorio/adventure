@@ -1,4 +1,4 @@
-import {Entity} from './entity.js';
+import {Entity} from '../entity/entity.js';
 import {Space} from '../util/space.js';
 import {StorageAdapter} from '../transport/storage-adapter.js';
 import {Queue} from '../async/queue.js';
