@@ -33,7 +33,7 @@ export class ChunkManager {
         this.#loaded.set(key, 0);
     }
 
-    #save(world, x, y) {
+    async #save(world, x, y) {
         const key = JSON.stringify([world, x, y]);
         if (!this.#loaded.has(key)) return;
         const entities = this.#entitySpace.search(world, x, y, this.#chunkSize, this.#chunkSize);
@@ -46,9 +46,7 @@ export class ChunkManager {
             entities.forEach(entity => this.#entitySpace.delete(entity));
         }
 
-        // The promise is ignored.
-
-        this.#storageAdapter.save(key, entities);
+        await this.#storageAdapter.save(key, entities);
     }
 
     /**
@@ -74,6 +72,9 @@ export class ChunkManager {
      */
 
     async save() {
-        return this.#queue.add(() => [...this.#loaded.keys()].forEach(key => this.#save(...JSON.parse(key))));
+        return this.#queue.add(async () => {
+            for (const key of this.#loaded.keys())
+                await this.#save(...JSON.parse(key));
+        });
     }
 }
