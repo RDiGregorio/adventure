@@ -17,10 +17,10 @@ function create(world, x, y) {
 
 test('chunkManager.search', async () => {
     const
-        chunkManager = new ChunkManager(new EntitySpace(), new StorageAdapter(), chunkSize, saveMilliseconds, create),
-        entities = await chunkManager.search('', 0, 0);
+        entitySpace = new EntitySpace(),
+        chunkManager = new ChunkManager(entitySpace, new StorageAdapter(), chunkSize, saveMilliseconds, create);
 
+    await chunkManager.load('', 0, 0);
+    const entities = entitySpace.search('', -chunkSize, -chunkSize, chunkSize * 3, chunkSize * 3);
     expect(entities.length).toBe(90);
-
-    // todo: need to test loading/saving/etc
 });
