@@ -1,5 +1,5 @@
 import {expect, test} from 'vitest';
-import {ChunkManager} from '../src/entity/chunk-manager.js';
+import {ChunkManager} from '../src/transport/chunk-manager.js';
 import {Entity} from '../src/entity/entity.js';
 import {StorageAdapter} from '../src/transport/storage-adapter.js';
 import {EntitySpace} from '../src/entity/entity-space.js';

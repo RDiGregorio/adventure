@@ -1,28 +1,35 @@
 import {Model} from './model.js';
 import {EntitySpace} from '../entity/entity-space.js';
-import {View} from './view.js';
-import {Controller} from './controller.js';
+import {Metronome} from "../async/metronome.js";
 
 export class Game {
-    #controllers = new Map();
-    #views = new Map();
     #model = new Model(new EntitySpace(), new EntitySpace(), new EntitySpace());
+    #accountManager;
+    #chunkManager;
+    #metronome;
 
-    constructor() {
-        // TODO: add a game loop
+    constructor(accountManager, chunkManager, milliseconds) {
+        this.#accountManager = accountManager;
+        this.#chunkManager = chunkManager;
+
+        this.#metronome = new Metronome(milliseconds, () => {
+            // TODO: game loop (run each account/player)
+        });
+    }
+
+    get accountManager() {
+        return this.#accountManager;
+    }
+
+    get chunkManager() {
+        return this.#chunkManager;
     }
 
     get model() {
         return this.#model;
     }
 
-    view(id) {
-        if (!this.#views.has(id)) this.#views.set(id, new View(this.#model));
-        return this.#views.get(id);
-    }
-
-    controller(id) {
-        if (!this.#controllers.has(id)) this.#controllers.set(id, new Controller(null, null));
-        return this.#controllers.get(id);
+    stop() {
+        this.#metronome.stop();
     }
 }
