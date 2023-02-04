@@ -35,7 +35,7 @@ export class EntitySpace {
 
     /**
      * Searches a world for entities.
-     * @param {number} world
+     * @param {string} world
      * @param {number} x
      * @param {number} y
      * @param {number} width
