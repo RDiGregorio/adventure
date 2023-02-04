@@ -67,7 +67,8 @@ export class ChunkManager {
     }
 
     /**
-     * Saves each loaded chunk. Unused chunks are unloaded.
+     * Saves each loaded chunk. Unused chunks are unloaded. If you do not wait for the promise then be careful about
+     * entities moving while chunks are being saved.
      * @return {Promise<void>}
      */
 
