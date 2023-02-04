@@ -43,14 +43,10 @@ export class ChunkManager {
         return this.#queue.add(async () => {
             const key = JSON.stringify([world, x, y]), exists = this.#loaded.has(key);
             this.#loaded.set(key, Date.now());
-            if (exists) return;
 
-            const entities = await this.#storageAdapter.exists(key)
-                ? await this.#storageAdapter.load(key)
-                : await this.#create(world, x, y);
-
-            for (const entity of entities)
-                this.#entitySpace.add(entity, entity.world, entity.x, entity.y);
+            if (!exists)
+                for (const entity of await this.#storageAdapter.load(key, () => this.#create(world, x, y)))
+                    this.#entitySpace.add(entity, entity.world, entity.x, entity.y);
         });
     }
 
@@ -58,6 +54,11 @@ export class ChunkManager {
         return this.#queue.add(async () => {
             const key = JSON.stringify([world, x, y]);
             if (!this.#loaded.has(key)) return;
+
+            // fixme: this can flake:
+            // chunk A is saved
+            // monster walks from B to A
+            // chunk B is saved
 
             await this
                 .#storageAdapter
