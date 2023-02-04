@@ -43,7 +43,7 @@ export class MapUtil {
      */
 
     static reviveMap(key, value) {
-        const type = this.#classes.get(value?.class);
+        const type = MapUtil.#classes.get(value?.class);
 
         return type === Map || type?.prototype instanceof Map
             ? value.entries.reduce((result, entry) => result.set(...entry), new type())
@@ -56,7 +56,7 @@ export class MapUtil {
      * @param {Map} source
      */
 
-    static replace(target, source) {
+    static sync(target, source) {
         [...target.keys()]
             .filter(key => !source.has(key) || source.get(key) !== target.get(key))
             .forEach(key => target.delete(key));
