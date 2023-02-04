@@ -21,4 +21,6 @@ test('chunkManager.search', async () => {
         entities = await chunkManager.search('', 0, 0);
 
     expect(entities.length).toBe(90);
+
+    // todo: need to test loading/saving/etc
 });

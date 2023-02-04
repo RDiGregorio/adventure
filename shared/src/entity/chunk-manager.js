@@ -56,13 +56,24 @@ export class ChunkManager {
 
     #save(world, x, y, unload = false) {
         return this.#queue.add(async () => {
-            const key = JSON.stringify([world, x, y]);
+            const key = JSON.stringify([world, x, y]), size = this.#chunkSize;
             if (!this.#loaded.has(key)) return;
-            const entities = this.#entitySpace.search(world, x, y, this.#chunkSize, this.#chunkSize);
-            await this.#storageAdapter.save(key, entities);
+
+            // Entities in all loaded adjacent chunks are saved (for redundancy to prevent losses from crashing).
+
+            await this
+                .#storageAdapter
+                .save(key, this.#entitySpace.search(world, x - size, y - size, size * 3, size * 3));
+
             if (!unload) return;
             this.#loaded.delete(key);
-            entities.forEach(entity => this.#entitySpace.delete(entity));
+
+            // Only entities in the specified chunk are deleted on unload.
+
+            this
+                .#entitySpace
+                .search(world, x, y, size, size)
+                .forEach(entity => this.#entitySpace.delete(entity));
         });
     }
 
@@ -71,20 +82,13 @@ export class ChunkManager {
      * @param {string} world
      * @param {number} x
      * @param {number} y
-     * @return {Promise<Entity[]>}
+     * @return {Promise<void>}
      */
 
-    async search(world, x, y) {
-        const result = [];
-
+    async load(world, x, y) {
         for (let i = -1; i <= 1; i++)
-            for (let j = -1; j <= 1; j++) {
-                const chunk = {x: x + i * this.#chunkSize, y: y + j * this.#chunkSize};
-                await this.#load(world, chunk.x, chunk.y);
-                result.push(...this.#entitySpace.search(world, chunk.x, chunk.y, this.#chunkSize, this.#chunkSize));
-            }
-
-        return result;
+            for (let j = -1; j <= 1; j++)
+                await this.#load(world, x + i * this.#chunkSize, y + j * this.#chunkSize);
     }
 
     /**
