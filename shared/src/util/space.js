@@ -23,8 +23,7 @@ export class Space {
      */
 
     toArray() {
-        const x = this.#rTree.root.x, y = this.#rTree.root.y;
-        return this.#rTree.bbox(x, y, x + this.#rTree.root.w, y + this.#rTree.root.h);
+        return this.#rTree.search(this.#rTree.root);
     }
 
     /**
@@ -37,7 +36,7 @@ export class Space {
     add(value, x, y) {
         this.delete(value);
         this.#map.set(this.#identity(value), [x, y]);
-        this.#rTree.insert({x: x, y: y, w: 0, h: 0}, value);
+        this.#rTree.insert({x: x, y: y, w: 1, h: 1}, value);
     }
 
     /**
@@ -54,7 +53,7 @@ export class Space {
         this
             .search(x, y, 1, 1)
             .filter(value => this.#identity(value) === key)
-            .forEach(value => this.#rTree.remove({x: x, y: y, w: 0, h: 0}, value));
+            .forEach(value => this.#rTree.remove({x: x, y: y, w: 1, h: 1}, value));
     }
 
     /**
@@ -68,6 +67,6 @@ export class Space {
 
     search(x, y, width, height) {
         if (width < 1 || height < 1) return [];
-        return this.#rTree.bbox(x, y, x + width - 1, y + height - 1);
+        return this.#rTree.search({x: x, y: y, w: width, h: height});
     }
 }

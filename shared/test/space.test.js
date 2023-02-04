@@ -32,3 +32,12 @@ test('space.delete', () => {
     space.delete('b');
     expect(space.toArray()).toEqual([]);
 });
+
+test('space.toArray', () => {
+    const space = new Space();
+    space.add('a', 4, 4);
+    space.add('b', 4, 5);
+    expect(space.search(4, 4, 1, 1).sort()).toEqual(['a']);
+    expect(space.search(4, 4, 1, 2).sort()).toEqual(['a', 'b']);
+    expect(space.toArray().sort()).toEqual(['a', 'b']);
+});
