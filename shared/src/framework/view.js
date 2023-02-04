@@ -1,5 +1,5 @@
 import {ObservableMap} from '../event/observable-map.js';
-import {MapUtil} from "../util/map-util.js";
+import {MapUtil} from '../util/map-util.js';
 
 /**
  * A view of multiple entity spaces.
