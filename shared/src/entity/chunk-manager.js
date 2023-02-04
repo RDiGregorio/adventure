@@ -98,6 +98,6 @@ export class ChunkManager {
 
     async unload() {
         for (const key of this.#loaded.keys())
-            await this.#save(...JSON.parse(key));
+            await this.#save(...JSON.parse(key), true);
     }
 }
