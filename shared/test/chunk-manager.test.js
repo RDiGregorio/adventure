@@ -20,7 +20,7 @@ test('chunkManager.search', async () => {
         entitySpace = new EntitySpace(),
         chunkManager = new ChunkManager(entitySpace, new StorageAdapter(), chunkSize, saveMilliseconds, create);
 
-    await chunkManager.load('', 0, 0);
+    await chunkManager.loadNearbyChunks('', 0, 0);
     const entities = entitySpace.search('', -chunkSize, -chunkSize, chunkSize * 3, chunkSize * 3);
     expect(entities.length).toBe(90);
 });

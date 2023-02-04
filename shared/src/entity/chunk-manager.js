@@ -56,48 +56,44 @@ export class ChunkManager {
 
     #save(world, x, y, unload = false) {
         return this.#queue.add(async () => {
-            const key = JSON.stringify([world, x, y]), size = this.#chunkSize;
+            const key = JSON.stringify([world, x, y]);
             if (!this.#loaded.has(key)) return;
-
-            // Entities in all loaded adjacent chunks are saved (for redundancy to prevent losses from crashing).
 
             await this
                 .#storageAdapter
-                .save(key, this.#entitySpace.search(world, x - size, y - size, size * 3, size * 3));
+                .save(key, this.#entitySpace.search(world, x, y, this.#chunkSize, this.#chunkSize));
 
             if (!unload) return;
             this.#loaded.delete(key);
 
-            // Only entities in the specified chunk are deleted on unload.
-
             this
                 .#entitySpace
-                .search(world, x, y, size, size)
+                .search(world, x, y, this.#chunkSize, this.#chunkSize)
                 .forEach(entity => this.#entitySpace.delete(entity));
         });
     }
 
     /**
-     * Loads each adjacent chunk (creating chunks as needed).
+     * Loads each nearby chunk (creating chunks as needed).
      * @param {string} world
      * @param {number} x
      * @param {number} y
      * @return {Promise<void>}
      */
 
-    async load(world, x, y) {
+    async loadNearbyChunks(world, x, y) {
         for (let i = -1; i <= 1; i++)
             for (let j = -1; j <= 1; j++)
                 await this.#load(world, x + i * this.#chunkSize, y + j * this.#chunkSize);
     }
 
     /**
-     * Saves and unloads each loaded chunk.
+     * Saves each loaded chunk.
      * @return {Promise<void>}
      */
 
-    async unload() {
+    async save() {
         for (const key of this.#loaded.keys())
-            await this.#save(...JSON.parse(key), true);
+            await this.#save(...JSON.parse(key));
     }
 }
