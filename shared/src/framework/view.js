@@ -3,7 +3,7 @@ import {MapUtil} from '../util/map-util.js';
 import {Model} from './model.js';
 
 /**
- * A view of a `Model`.
+ * A view of a game. Each player in a game should have a different view of the game.
  */
 
 export class View {

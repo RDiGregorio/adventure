@@ -1,5 +1,5 @@
 /**
- * The entity spaces used for players, chunks, and pets.
+ * A model of a game. Each player in a game should share the same model of the game.
  */
 
 export class Model {
