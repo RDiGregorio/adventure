@@ -9,12 +9,17 @@ import {ObservableMap} from '../event/observable-map.js';
 export class Entity extends ObservableMap {
     /**
      * @param {string} type
+     * @param {string} world
+     * @param {number} x
+     * @param {number} y
      */
 
-    constructor(type) {
+    constructor(type, world, x, y) {
         super();
         this.set('id', uuid());
         this.set('type', type);
+        this.set('world', world);
+        this.set('location', [x, y]);
     }
 
     /**
@@ -50,7 +55,7 @@ export class Entity extends ObservableMap {
      */
 
     get x() {
-        return this.has('location') ? this.get('location')[0] : undefined;
+        return this.get('location')[0];
     }
 
     /**
@@ -59,6 +64,6 @@ export class Entity extends ObservableMap {
      */
 
     get y() {
-        return this.has('location') ? this.get('location')[1] : undefined;
+        return this.get('location')[1];
     }
 }

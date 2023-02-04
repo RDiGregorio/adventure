@@ -20,8 +20,6 @@ test('MapUtil.sync', () => {
     multiMaps[1].set('a', 1);
     multiMaps[1].set('b', 2);
     MapUtil.sync(multiMaps[0], multiMaps[1]);
-    console.log(multiMaps[0]);
-    console.log(multiMaps[1]);
     expect([...multiMaps[0]]).toEqual([['a', 0], ['a', 1], ['b', 2]]);
 });
 
