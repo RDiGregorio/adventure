@@ -25,6 +25,10 @@ export class AccountManager {
         return [...this.#accounts.values()];
     }
 
+    exists(key) {
+        return this.#queue.add(async () => this.#accounts.has(key) || await this.#storageAdapter.exists(key));
+    }
+
     /**
      * Loads a player account (creating it if needed).
      * @param {string} key
@@ -52,7 +56,7 @@ export class AccountManager {
      * @return {Promise<Account>}
      */
 
-    async save(key, unload = false) {
+    save(key, unload = false) {
         return this.#queue.add(async () => {
             if (this.#accounts.has(key)) await this.#storageAdapter.save(key, this.#accounts.get(key));
             if (unload) this.#accounts.delete(key);
