@@ -1,31 +1,33 @@
-import {Entity} from '../entity/entity.js';
-import {Space} from '../util/space.js';
-import {StorageAdapter} from '../transport/storage-adapter.js';
 import {Queue} from '../async/queue.js';
 
-// todo: abstract this to an entity manager; only save/load are different from player manager
+/**
+ * Saves and loads chunks of entities.
+ */
 
 export class ChunkManager {
     #queue = new Queue();
     #loaded = new Map();
-    #spaces = new Map();
-    #chunkSize;
+    #entitySpace;
     #storageAdapter;
+    #chunkSize;
     #create;
 
     /**
-     * @param {number} chunkSize
+     * @param {EntitySpace} entitySpace
      * @param {StorageAdapter} storageAdapter
-     * @param {function(number, number, number): Entity[]} create
+     * @param {number} chunkSize
+     * @param {function(number, number, number): Entity[]|Promise<Entity[]>} create
      */
 
-    constructor(chunkSize, storageAdapter, create) {
-        this.#chunkSize = chunkSize;
+    constructor(entitySpace, storageAdapter, chunkSize, create) {
+        this.#entitySpace = entitySpace;
         this.#storageAdapter = storageAdapter;
+        this.#chunkSize = chunkSize;
         this.#create = create;
     }
 
     /**
+     * Returns the chunk size.
      * @return {number}
      */
 
@@ -34,6 +36,7 @@ export class ChunkManager {
     }
 
     /**
+     * Returns the loaded chunk locations.
      * @return {number[][]}
      */
 
@@ -42,43 +45,8 @@ export class ChunkManager {
     }
 
     /**
-     * @param {number} world
-     * @param {number} x
-     * @param {number} y
-     * @param {number} width
-     * @param {number} height
-     * @return {Entity[]}
-     */
-
-    search(world, x, y, width, height) {
-        return this.#spaces.get(world)?.search(x, y, width, height) ?? [];
-    }
-
-    /**
-     * @param {Entity} entity
-     * @param {number} world
-     * @param {number} x
-     * @param {number} y
-     */
-
-    add(entity, world, x, y) {
-        this.delete(entity);
-        entity.set('world', world);
-        entity.set('location', [x, y]);
-        if (!this.#spaces.has(world)) this.#spaces.set(world, new Space(entity => entity.id));
-        this.#spaces.get(world).add(entity, x, y);
-    }
-
-    /**
-     * @param {Entity} entity
-     */
-
-    delete(entity) {
-        this.#spaces.get(entity.get('world'))?.delete(entity);
-    }
-
-    /**
-     * @param {number} world
+     * Returns true if a chunk exists.
+     * @param {string} world
      * @param {number} x
      * @param {number} y
      * @return {Promise<boolean>}
@@ -92,6 +60,7 @@ export class ChunkManager {
     }
 
     /**
+     * Loads a chunk if it exists or creates it otherwise.
      * @param {number} world
      * @param {number} x
      * @param {number} y
@@ -106,18 +75,19 @@ export class ChunkManager {
 
             const entities = await this.#storageAdapter.exists(key)
                 ? await this.#storageAdapter.load(key)
-                : this.#create(world, x, y);
+                : await this.#create(world, x, y);
 
             for (const entity of entities)
-                this.add(entity, entity.world, entity.x, entity.y);
+                this.#entitySpace.add(entity, entity.world, entity.x, entity.y);
         });
     }
 
     /**
+     * Saves a chunk.
      * @param {number} world
      * @param {number} x
      * @param {number} y
-     * @param {boolean} unload
+     * @param {boolean} [unload = false]
      * @return {Promise<void>}
      */
 
@@ -125,11 +95,11 @@ export class ChunkManager {
         return this.#queue.add(async () => {
             const key = JSON.stringify([world, x, y]);
             if (!this.#loaded.has(key)) return;
-            const entities = this.search(world, x, y, this.#chunkSize, this.#chunkSize);
+            const entities = this.#entitySpace.search(world, x, y, this.#chunkSize, this.#chunkSize);
             await this.#storageAdapter.save(key, entities);
             if (!unload) return;
             this.#loaded.delete(key);
-            entities.forEach(entity => this.delete(entity));
+            entities.forEach(entity => this.#entitySpace.delete(entity));
         });
     }
 }

@@ -1,12 +1,12 @@
 /**
- * An abstract storage adapter.
+ * An abstract storage adapter. Implemented for testing using a map.
  */
 
 class StorageAdapter {
     #storage = new Map();
 
     /**
-     * @param {string} key
+     * @param {*} key
      * @return {Promise<boolean>}
      */
 
@@ -15,7 +15,7 @@ class StorageAdapter {
     }
 
     /**
-     * @param {string} key
+     * @param {*} key
      * @return {Promise<*>}
      */
 
@@ -24,7 +24,7 @@ class StorageAdapter {
     }
 
     /**
-     * @param {string} key
+     * @param {*} key
      * @param {*} value
      * @return {Promise<void>}
      */

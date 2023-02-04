@@ -10,7 +10,7 @@ export function hex(number) {
 
 /**
  * Returns a random integer between 0 (inclusive) and `number` (exclusive).
- * @param {number=} number
+ * @param {number} [number = 4294967296]
  * @return {number}
  */
 

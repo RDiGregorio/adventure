@@ -26,7 +26,7 @@ export class MultiMap extends Map {
     /**
      * Deletes an entry. Returns true if the entry existed.
      * @param {*} key
-     * @param {*=} value
+     * @param {*} [value]
      * @return {boolean}
      */
 
@@ -52,7 +52,7 @@ export class MultiMap extends Map {
     /**
      * Calls `callback` with each entry.
      * @param {function(*, *, MultiMap)} callback
-     * @param {*=} self
+     * @param {*} [self = this]
      */
 
     forEach(callback, self = this) {
