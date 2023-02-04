@@ -2,7 +2,8 @@ import {uuid} from '../util/uuid.js';
 import {ObservableMap} from '../event/observable-map.js';
 
 /**
- * An `ObservableMap` with an id, type, and location.
+ * An `ObservableMap` with an id, type, and location (world, x, and y). Its location should only be updated when it is
+ * added to an `EntitySpace` (the location update happens automatically).
  */
 
 export class Entity extends ObservableMap {

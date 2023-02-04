@@ -1,16 +1,15 @@
 import {Space} from '../util/space.js';
 
-// TODO: call this entity space?
-
 /**
- * Adds entities to worlds with fast spatial searching.
+ * A collection of entities with multiple worlds and fast spatial searching.
  */
 
-class EntityManager {
+class EntitySpace {
     #spaces = new Map();
 
     /**
-     * Adds an entity to a world and deletes previously added duplicates from all worlds.
+     * Adds an entity to a world and deletes previously added duplicates from all worlds. Doing so automatically updates
+     * the entity's location (world, x, and y).
      * @param {Entity} entity
      * @param {string} world
      * @param {number} x
