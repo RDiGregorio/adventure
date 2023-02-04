@@ -2,7 +2,7 @@
  * An abstract storage adapter. Implemented for testing using a map.
  */
 
-class StorageAdapter {
+export class StorageAdapter {
     #storage = new Map();
 
     /**

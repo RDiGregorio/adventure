@@ -4,7 +4,7 @@ import {Space} from '../util/space.js';
  * A collection of entities with multiple worlds and fast spatial searching.
  */
 
-class EntitySpace {
+export class EntitySpace {
     #spaces = new Map();
 
     /**
