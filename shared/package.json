@@ -11,6 +11,7 @@
     "vitest": "^0.28.3"
   },
   "scripts": {
+    "link": "link.bat",
     "test": "vitest --watch=false"
   }
 }
