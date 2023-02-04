@@ -1,6 +1,7 @@
 // todo: this will handle the player manager and chunk manager
 // should each player have a different controller?
-// shoul this be like a session in TCO?
+// should this be like a session in TCO? should it take in a 'game' object?
+// where is the game loop?
 
 /**
  * A game controller. Each player in a game should have a different game controller.
