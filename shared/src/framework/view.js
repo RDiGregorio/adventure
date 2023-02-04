@@ -1,8 +1,9 @@
 import {ObservableMap} from '../event/observable-map.js';
 import {MapUtil} from '../util/map-util.js';
+import {Model} from './model.js';
 
 /**
- * A view of multiple entity spaces.
+ * A view of a `Model`.
  */
 
 export class View {
@@ -10,11 +11,11 @@ export class View {
     #entitySpaces;
 
     /**
-     * @param {...EntitySpace[]} entitySpaces
+     * @param {Model} model
      */
 
-    constructor(...entitySpaces) {
-        this.#entitySpaces = entitySpaces;
+    constructor(model) {
+        this.#entitySpaces = [model.playerSpace, model.chunkSpace, model.petSpace];
     }
 
     /**
