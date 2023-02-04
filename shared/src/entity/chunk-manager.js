@@ -26,48 +26,7 @@ export class ChunkManager {
         this.#create = create;
     }
 
-    /**
-     * Returns the chunk size.
-     * @return {number}
-     */
-
-    get chunkSize() {
-        return this.#chunkSize;
-    }
-
-    /**
-     * Returns the loaded chunk locations.
-     * @return {number[][]}
-     */
-
-    get loadedChunkLocations() {
-        return [...this.#loaded.values()].map(array => [...array]);
-    }
-
-    /**
-     * Returns true if a chunk exists.
-     * @param {string} world
-     * @param {number} x
-     * @param {number} y
-     * @return {Promise<boolean>}
-     */
-
-    exists(world, x, y) {
-        return this.#queue.add(() => {
-            const key = JSON.stringify([world, x, y]);
-            return this.#loaded.has(key) || this.#storageAdapter.exists(key);
-        });
-    }
-
-    /**
-     * Loads a chunk (creating it if it does not exist). Does nothing if the chunk is already loaded.
-     * @param {number} world
-     * @param {number} x
-     * @param {number} y
-     * @return {Promise<void>}
-     */
-
-    load(world, x, y) {
+    #load(world, x, y) {
         return this.#queue.add(async () => {
             const key = JSON.stringify([world, x, y]);
             if (this.#loaded.has(key)) return;
@@ -83,7 +42,7 @@ export class ChunkManager {
     }
 
     /**
-     * Saves a chunk. Does nothing if the chunk is not loaded.
+     * Saves a loaded chunk. Does nothing if the chunk is not loaded.
      * @param {number} world
      * @param {number} x
      * @param {number} y
@@ -103,7 +62,24 @@ export class ChunkManager {
         });
     }
 
-    search(world, x, y, width, height) {
-        // can probably hide "load"
+    /**
+     * Returns each entity in an adjacent chunk (loading or creating chunks as needed).
+     * @param world
+     * @param x
+     * @param y
+     * @return {Promise<Entity[]>}
+     */
+
+    async search(world, x, y) {
+        const result = [];
+
+        for (let i = -1; i <= 1; i++)
+            for (let j = -1; j <= 1; j++) {
+                const chunk = {x: x + i * this.#chunkSize, y: y + j * this.#chunkSize};
+                await this.#load(world, chunk.x, chunk.y);
+                result.push(...this.#entitySpace.search(world, chunk.x, chunk.y, this.#chunkSize, this.#chunkSize));
+            }
+
+        return result;
     }
 }
