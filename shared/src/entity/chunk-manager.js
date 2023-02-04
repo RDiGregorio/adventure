@@ -1,7 +1,7 @@
 import {Queue} from '../async/queue.js';
 
 /**
- * Saves and loads chunks of entities in an `EntitySpace` using a `StorageAdapter`.
+ * Creates, saves, loads, and searches chunks of entities.
  */
 
 export class ChunkManager {
@@ -16,7 +16,7 @@ export class ChunkManager {
      * @param {EntitySpace} entitySpace
      * @param {StorageAdapter} storageAdapter
      * @param {number} chunkSize
-     * @param {function(number, number, number): Entity[]|Promise<Entity[]>} create
+     * @param {function(string, number, number): Entity[]|Promise<Entity[]>} create
      */
 
     constructor(entitySpace, storageAdapter, chunkSize, create) {
@@ -26,11 +26,20 @@ export class ChunkManager {
         this.#create = create;
     }
 
+    /**
+     * Returns a map from loaded chunk locations (world, x, and y) to the last time that chunk was searched.
+     * @return {Map<[string, number, number], number>}
+     */
+
+    get chunkSearchDates() {
+        return [...this.#loaded].reduce((result, entry) => result.set(JSON.parse(entry[0]), entry[1]), new Map());
+    }
+
     #load(world, x, y) {
         return this.#queue.add(async () => {
-            const key = JSON.stringify([world, x, y]);
-            if (this.#loaded.has(key)) return;
-            this.#loaded.set(key, [world, x, y]);
+            const key = JSON.stringify([world, x, y]), exists = this.#loaded.has(key);
+            this.#loaded.set(key, Date.now());
+            if (exists) return;
 
             const entities = await this.#storageAdapter.exists(key)
                 ? await this.#storageAdapter.load(key)
@@ -43,7 +52,7 @@ export class ChunkManager {
 
     /**
      * Saves a loaded chunk. Does nothing if the chunk is not loaded.
-     * @param {number} world
+     * @param {string} world
      * @param {number} x
      * @param {number} y
      * @param {boolean} [unload = false]
@@ -63,10 +72,11 @@ export class ChunkManager {
     }
 
     /**
-     * Returns each entity in an adjacent chunk (loading or creating chunks as needed).
-     * @param world
-     * @param x
-     * @param y
+     * Returns each entity in each adjacent chunk (loading or creating chunks as needed). Updates `chunkSearchDates` for
+     * each adjacent chunk.
+     * @param {string} world
+     * @param {number} x
+     * @param {number} y
      * @return {Promise<Entity[]>}
      */
 
