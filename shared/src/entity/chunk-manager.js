@@ -2,7 +2,7 @@ import {Queue} from '../async/queue.js';
 import {Metronome} from "../async/metronome.js";
 
 /**
- * Creates, loads, saves, and searches spatial chunks of entities.
+ * Creates, loads, and saves spatial chunks of entities.
  */
 
 export class ChunkManager {
@@ -78,7 +78,7 @@ export class ChunkManager {
     }
 
     /**
-     * Returns each entity in each adjacent chunk (creating and loading chunks as needed).
+     * Loads each adjacent chunk (creating chunks as needed).
      * @param {string} world
      * @param {number} x
      * @param {number} y
