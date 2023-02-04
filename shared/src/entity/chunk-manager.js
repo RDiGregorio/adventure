@@ -60,7 +60,7 @@ export class ChunkManager {
     }
 
     /**
-     * Loads a chunk if it exists or creates it otherwise.
+     * Loads a chunk (creating it if it does not exist). Does nothing if the chunk is already loaded.
      * @param {number} world
      * @param {number} x
      * @param {number} y
@@ -83,7 +83,7 @@ export class ChunkManager {
     }
 
     /**
-     * Saves a chunk.
+     * Saves a chunk. Does nothing if the chunk is not loaded.
      * @param {number} world
      * @param {number} x
      * @param {number} y
