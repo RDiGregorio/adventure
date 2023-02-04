@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import './app.css';
 import React from 'react';
-import {GameView} from 'shared/src/engine/game-view';
-import {Entity} from 'shared/src/engine/entity';
-import {ChunkManager} from 'shared/src/engine/chunk-manager';
-import {StorageAdapter} from 'shared/src/util/storage-adapter';
+import {Entity} from 'shared/src/entity/entity';
+import {StorageAdapter} from 'shared/src/transport/storage-adapter';
+import {Game} from 'shared/src/framework/game';
+import {Account} from 'shared/src/framework/account';
 import {random} from 'shared/src/util/math';
 
 const chunkSize = 25;
@@ -15,26 +15,32 @@ export default class App extends React.Component {
         this.#init();
     }
 
-    async #init() {
-        const chunkManager = new ChunkManager(
-            chunkSize,
+    #init() {
+        const chunkSize = 25, game = new Game(
             new StorageAdapter(),
-            (world, x, y) => _.range(5).map(() => new Entity(
-                world,
-                x + random(chunkSize),
-                y + random(chunkSize)
-            ))
-        );
+            new StorageAdapter(),
+            100,
+            1000,
+            async (game, account) => {
+                game.chunkManager.loadNearbyChunks('', 0, 0, (world, x, y) => {
+                    const result = [];
 
-        const viewer = new Entity(0, 0, 0);
-        const gameView = new GameView(viewer, chunkManager, null);
-        await chunkManager.load(0, 0, 0);
-        await gameView.load();
+                    for (let i = 0; i < 10; i++)
+                        result.push(new Entity('', '', x + random(chunkSize), y + random(chunkSize)));
 
-        gameView.forEach(entity => {
-            const element = document.querySelector(`#tile-${entity.x}-${entity.y}`);
-            if (element) element.textContent = '🐉';
-        });
+                    return result;
+                });
+
+                // Render.
+
+                game.model.chunkSpace.toArray().forEach(entity => {
+                    const element = document.querySelector(`#tile-${entity.x}-${entity.y}`);
+                    if (element) element.textContent = '🐉';
+                });
+
+            });
+
+        game.accountManager.load('player', () => new Account());
     }
 
     #tiles(width, height) {
