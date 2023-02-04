@@ -13,6 +13,8 @@ export class Metronome {
      */
 
     constructor(milliseconds, callback) {
+        // The promise is ignored.
+
         this.#run(milliseconds, callback);
     }
 

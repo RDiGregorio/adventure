@@ -1,7 +1,8 @@
 import {Queue} from '../async/queue.js';
+import {Metronome} from "../async/metronome.js";
 
 /**
- * Creates, saves, loads, and searches chunks of entities.
+ * Creates, loads, saves, and searches spatial chunks of entities.
  */
 
 export class ChunkManager {
@@ -16,23 +17,26 @@ export class ChunkManager {
      * @param {EntitySpace} entitySpace
      * @param {StorageAdapter} storageAdapter
      * @param {number} chunkSize
+     * @param {number} saveMilliseconds
      * @param {function(string, number, number): Entity[]|Promise<Entity[]>} create
      */
 
-    constructor(entitySpace, storageAdapter, chunkSize, create) {
+    constructor(entitySpace, storageAdapter, chunkSize, saveMilliseconds, create) {
         this.#entitySpace = entitySpace;
         this.#storageAdapter = storageAdapter;
         this.#chunkSize = chunkSize;
         this.#create = create;
-    }
 
-    /**
-     * Returns a map from loaded chunk locations (world, x, and y) to the last time that chunk was searched.
-     * @return {Map<[string, number, number], number>}
-     */
+        new Metronome(saveMilliseconds, () => {
+                for (const [key, value] of this.#loaded) {
+                    const [world, x, y] = JSON.parse(key);
 
-    get chunkSearchDates() {
-        return [...this.#loaded].reduce((result, entry) => result.set(JSON.parse(entry[0]), entry[1]), new Map());
+                    // The promise is ignored.
+
+                    this.#save(world, x, y, value + saveMilliseconds >= Date.now());
+                }
+            }
+        );
     }
 
     #load(world, x, y) {
@@ -50,16 +54,7 @@ export class ChunkManager {
         });
     }
 
-    /**
-     * Saves a loaded chunk. Does nothing if the chunk is not loaded.
-     * @param {string} world
-     * @param {number} x
-     * @param {number} y
-     * @param {boolean} [unload = false]
-     * @return {Promise<void>}
-     */
-
-    save(world, x, y, unload = false) {
+    #save(world, x, y, unload = false) {
         return this.#queue.add(async () => {
             const key = JSON.stringify([world, x, y]);
             if (!this.#loaded.has(key)) return;
@@ -72,8 +67,7 @@ export class ChunkManager {
     }
 
     /**
-     * Returns each entity in each adjacent chunk (loading or creating chunks as needed). Updates `chunkSearchDates` for
-     * each adjacent chunk.
+     * Returns each entity in each adjacent chunk (loading and creating chunks as needed).
      * @param {string} world
      * @param {number} x
      * @param {number} y
@@ -91,5 +85,13 @@ export class ChunkManager {
             }
 
         return result;
+    }
+
+    /**
+     * Saves each loaded chunk.
+     */
+
+    unload() {
+        [...this.#loaded.keys()].forEach(key => this.#save(...JSON.parse(key)));
     }
 }
