@@ -7,40 +7,34 @@ import {Game} from 'shared/src/framework/game';
 import {Account} from 'shared/src/framework/account';
 import {random} from 'shared/src/util/math';
 
-const chunkSize = 25;
+const chunkSize = 25, game = new Game(
+    new StorageAdapter(),
+    new StorageAdapter(),
+    chunkSize,
+    100,
+    async (game, account) => {
+        game.chunkManager.loadNearbyChunks('', 0, 0, (world, x, y) => {
+            const result = [];
+
+            for (let i = 0; i < 5; i++)
+                result.push(new Entity('', '', x + random(chunkSize), y + random(chunkSize)));
+
+            return result;
+        });
+
+        // Render.
+
+        game.model.chunkSpace.toArray().forEach(entity => {
+            const element = document.querySelector(`#tile-${entity.x}-${entity.y}`);
+            if (element) element.textContent = '🐉';
+        });
+    });
+
+game.accountManager.load('player', () => new Account());
 
 export default class App extends React.Component {
     constructor(properties) {
         super(properties);
-        this.#init();
-    }
-
-    #init() {
-        const chunkSize = 25, game = new Game(
-            new StorageAdapter(),
-            new StorageAdapter(),
-            100,
-            1000,
-            async (game, account) => {
-                game.chunkManager.loadNearbyChunks('', 0, 0, (world, x, y) => {
-                    const result = [];
-
-                    for (let i = 0; i < 10; i++)
-                        result.push(new Entity('', '', x + random(chunkSize), y + random(chunkSize)));
-
-                    return result;
-                });
-
-                // Render.
-
-                game.model.chunkSpace.toArray().forEach(entity => {
-                    const element = document.querySelector(`#tile-${entity.x}-${entity.y}`);
-                    if (element) element.textContent = '🐉';
-                });
-
-            });
-
-        game.accountManager.load('player', () => new Account());
     }
 
     #tiles(width, height) {
