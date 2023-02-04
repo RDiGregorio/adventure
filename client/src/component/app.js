@@ -28,7 +28,8 @@ const chunkSize = 25, game = new Game(
             const element = document.querySelector(`#tile-${entity.x}-${entity.y}`);
             if (element) element.textContent = '🐉';
         });
-    });
+    }
+);
 
 game.accountManager.load('player', () => new Account());
 
