@@ -67,7 +67,7 @@ export class ChunkManager {
     }
 
     /**
-     * Returns each entity in each adjacent chunk (loading and creating chunks as needed).
+     * Returns each entity in each adjacent chunk (creating and loading chunks as needed).
      * @param {string} world
      * @param {number} x
      * @param {number} y
@@ -88,10 +88,12 @@ export class ChunkManager {
     }
 
     /**
-     * Saves each loaded chunk.
+     * Saves and unloads each loaded chunk.
+     * @return {Promise<void>}
      */
 
-    unload() {
-        [...this.#loaded.keys()].forEach(key => this.#save(...JSON.parse(key)));
+    async unload() {
+        for (const key of this.#loaded.keys())
+            await this.#save(...JSON.parse(key));
     }
 }
