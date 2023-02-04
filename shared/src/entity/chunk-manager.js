@@ -1,12 +1,11 @@
 import {Queue} from '../async/queue.js';
-import {Metronome} from "../async/metronome.js";
+import {Metronome} from '../async/metronome.js';
 
 /**
  * Creates, loads, and saves spatial chunks of entities.
  */
 
 export class ChunkManager {
-    #queue = new Queue();
     #loaded = new Map();
     #entitySpace;
     #storageAdapter;
@@ -39,39 +38,30 @@ export class ChunkManager {
         );
     }
 
-    #load(world, x, y) {
-        return this.#queue.add(async () => {
-            const key = JSON.stringify([world, x, y]), exists = this.#loaded.has(key);
-            this.#loaded.set(key, Date.now());
+    async #load(world, x, y) {
+        const key = JSON.stringify([world, x, y]), exists = this.#loaded.has(key);
+        this.#loaded.set(key, Date.now());
 
-            if (!exists)
-                for (const entity of await this.#storageAdapter.load(key, () => this.#create(world, x, y)))
-                    this.#entitySpace.add(entity, entity.world, entity.x, entity.y);
-        });
+        if (!exists)
+            for (const entity of await this.#storageAdapter.load(key, () => this.#create(world, x, y)))
+                this.#entitySpace.add(entity, entity.world, entity.x, entity.y);
     }
 
-    #save(world, x, y, unload = false) {
-        return this.#queue.add(async () => {
-            const key = JSON.stringify([world, x, y]);
-            if (!this.#loaded.has(key)) return;
+    async #save(world, x, y, unload = false) {
+        const key = JSON.stringify([world, x, y]);
+        if (!this.#loaded.has(key)) return;
+        const entities = this.#entitySpace.search(world, x, y, this.#chunkSize, this.#chunkSize);
 
-            // fixme: this can flake:
-            // chunk A is saved
-            // monster walks from B to A
-            // chunk B is saved
+        // fixme: this can flake:
+        // chunk A is saved
+        // monster walks from B to A
+        // chunk B is saved
 
-            await this
-                .#storageAdapter
-                .save(key, this.#entitySpace.search(world, x, y, this.#chunkSize, this.#chunkSize));
+        await this.#storageAdapter.save(key, entities);
 
-            if (!unload) return;
-            this.#loaded.delete(key);
-
-            this
-                .#entitySpace
-                .search(world, x, y, this.#chunkSize, this.#chunkSize)
-                .forEach(entity => this.#entitySpace.delete(entity));
-        });
+        if (!unload) return;
+        this.#loaded.delete(key);
+        entities.forEach(entity => this.#entitySpace.delete(entity));
     }
 
     /**
