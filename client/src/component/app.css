@@ -1,5 +1,5 @@
 body {
-    background-color: black;
+    background-color: white;
 }
 
 .grid {
@@ -12,7 +12,8 @@ body {
 }
 
 .grid-cell {
-    border: 1px solid white;
+    background-color: lightgray;
+    border: 1px solid black;
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -23,9 +24,10 @@ body {
 .entity {
     color: red;
     font-size: 16px;
-    border: 1px solid red;
     width: 20px;
     height: 20px;
     overflow: hidden;
     position: fixed;
+    margin: 1px;
+    text-shadow: 0 0 2px white;
 }
