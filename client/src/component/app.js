@@ -6,14 +6,14 @@ import {StorageAdapter} from 'shared/src/transport/storage-adapter';
 import {Game} from 'shared/src/framework/game';
 import {Account} from 'shared/src/framework/account';
 import {random} from 'shared/src/util/math';
-import {View} from "shared/src/framework/view";
-import {animate} from "shared/src/async/async";
+import {View} from 'shared/src/framework/view';
+import {animate} from 'shared/src/async/async';
 
 const chunkSize = 25, game = new Game(
     new StorageAdapter(),
     new StorageAdapter(),
     chunkSize,
-    100,
+    200,
     (game, account) => {
         game.chunkManager.loadNearbyChunks('', 0, 0, (world, x, y) => {
             const result = [];
@@ -37,38 +37,38 @@ game.accountManager.load('player', () => new Account());
 
 export default class App extends React.Component {
     #view = new View(game.playerSpace, game.chunkSpace, game.petSpace);
-    #world = '';
-    #x = 0;
-    #y = 0;
-    #width = chunkSize;
-    #height = chunkSize;
 
     constructor(properties) {
         super(properties);
-
         animate(() => {
-            this.#view.update(this.#world, this.#x, this.#y, this.#width, this.#height);
+            this.#view.update('', 0, 0, chunkSize, chunkSize);
             this.forceUpdate();
         });
     }
 
-    #tile(x, y) {
-        const array = [...this.#view.tile(x, y)];
-        return array.length > 0 ? '🐉' : '';
+    #entity(entity) {
+        const cell = document.querySelector(`#grid-${entity.x}-${entity.y}`),
+            x = cell?.getBoundingClientRect()?.x ?? 0,
+            y = cell?.getBoundingClientRect()?.y ?? 0,
+            style = {position: 'fixed', left: `${x}px`, top: `${y}px`};
+
+        return <div className="noto-emoji entity" style={style} key={entity.id}>🐉</div>
     }
 
-    #tiles(width, height) {
-        //this.#view.update('', 0, 0, width, height);
+    #grid(width, height) {
         let key = 0;
 
-        return _.range(height).map(y => <div className="tile-container" key={key++}>{_.range(width).map(x => {
-            const id = `tile-${x}-${y}`;
-            return <div className="tile" id={id} key={key++}>{this.#tile(x, y)}</div>;
-        })}</div>);
+        return _.range(height).map(y =>
+            <div className="grid-row" key={key++}>{_.range(width).map(x =>
+                <div className="grid-cell" id={`grid-${x}-${y}`} key={`grid-${x}-${y}`}></div>
+            )}</div>
+        );
     }
 
     render() {
-        console.log(Date.now());
-        return <div className="noto-emoji">{this.#tiles(this.#width, this.#height)}</div>
+        return <div className="grid">
+            {this.#grid(chunkSize, chunkSize)}
+            {this.#view.toArray().map(this.#entity)}
+        </div>
     }
 }

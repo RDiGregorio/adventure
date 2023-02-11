@@ -39,15 +39,12 @@ export class View {
     }
 
     /**
-     * Returns the entities at a given location.
-     * @param {number} x
-     * @param {number} y
-     * @return {Iterable<*>}
+     * Returns each entity.
+     * @return {Entity[]}
      */
 
-    tile(x, y) {
-        // TODO: this is actually sort of bad
-        return this.#tiles.get(JSON.stringify([x, y]));
+    toArray() {
+        return [...this.#entities.values()];
     }
 
     /**

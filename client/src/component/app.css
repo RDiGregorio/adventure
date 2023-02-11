@@ -2,18 +2,30 @@ body {
     background-color: black;
 }
 
-.tile-container {
+.grid {
+    position: relative;
+}
+
+.grid-row {
     font-size: 0;
     white-space: nowrap;
 }
 
-.tile {
-    color: red;
-    font-size: 16px;
+.grid-cell {
     border: 1px solid white;
     display: inline-block;
     width: 20px;
     height: 20px;
     overflow: hidden;
     margin: 1px;
+}
+
+.entity {
+    color: red;
+    font-size: 16px;
+    border: 1px solid red;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    position: fixed;
 }
