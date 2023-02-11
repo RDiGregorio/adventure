@@ -1,4 +1,4 @@
-import {sleep} from './sleep.js';
+import {async} from './async.js';
 
 /**
  * Periodically calls a function.
@@ -22,7 +22,7 @@ export class Metronome {
         const start = Date.now();
 
         for (let offset = 0; this.#running; offset += milliseconds) {
-            await sleep(start - Date.now() + offset);
+            await async(start - Date.now() + offset);
             callback();
         }
     }

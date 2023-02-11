@@ -4,7 +4,6 @@ import {Entity} from '../src/entity/entity.js';
 import {StorageAdapter} from '../src/transport/storage-adapter.js';
 import {EntitySpace} from '../src/entity/entity-space.js';
 import {View} from '../src/framework/view.js';
-import {Model} from '../src/framework/model.js';
 
 const chunkSize = 100;
 
@@ -25,7 +24,7 @@ test('chunkManager.search', async () => {
     await chunkManager.loadNearbyChunks('', 0, 0, create);
     const entities = entitySpace.search('', -chunkSize, -chunkSize, chunkSize * 3, chunkSize * 3);
     expect(entities.length).toBe(90);
-    const view = new View(new Model(new EntitySpace(), entitySpace, new EntitySpace()));
+    const view = new View(new EntitySpace(), entitySpace, new EntitySpace());
     view.search('', -chunkSize, -chunkSize, chunkSize * 3, chunkSize * 3);
     expect(view.entities.size).toBe(entities.length);
 });

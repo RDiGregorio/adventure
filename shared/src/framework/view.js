@@ -1,6 +1,6 @@
 import {ObservableMap} from '../event/observable-map.js';
 import {MapUtil} from '../util/map-util.js';
-import {Model} from './model.js';
+import {MultiMap} from '../util/multi-map.js';
 
 /**
  * A view of a game. Each player in a game should have a different view of the game.
@@ -8,27 +8,50 @@ import {Model} from './model.js';
 
 export class View {
     #entities = new ObservableMap();
+    #tiles = new MultiMap();
     #entitySpaces;
 
     /**
-     * @param {Model} model
+     * @param {...EntitySpace[]} entitySpaces
      */
 
-    constructor(model) {
-        this.#entitySpaces = [model.playerSpace, model.chunkSpace, model.petSpace];
+    constructor(...entitySpaces) {
+        this.#entitySpaces = entitySpaces;
     }
 
     /**
-     * Returns the entities found from the last search.
-     * @return {ObservableMap}
+     * Adds an event listener. Returns a string for `removeEventListener`.
+     * @param {function(MapEvent): void} callback
+     * @return {string}
      */
 
-    get entities() {
-        return this.#entities;
+    addEventListener(callback) {
+        return this.#entities.addEventListener(callback);
     }
 
     /**
-     * Searches a world for entities and stores the results as a map from ids to entities.
+     * Removes an event listener using a string from `addEventListener`.
+     * @param {string} key
+     */
+
+    removeEventListener(key) {
+        return this.#entities.removeEventListener(key);
+    }
+
+    /**
+     * Returns the entities at a given location.
+     * @param {number} x
+     * @param {number} y
+     * @return {Iterable<*>}
+     */
+
+    tile(x, y) {
+        // TODO: this is actually sort of bad
+        return this.#tiles.get(JSON.stringify([x, y]));
+    }
+
+    /**
+     * Searches a world for entities and dispatches events for each change.
      * @param {string} world
      * @param {number} x
      * @param {number} y
@@ -36,8 +59,9 @@ export class View {
      * @param {number} height
      */
 
-    search(world, x, y, width, height) {
+    update(world, x, y, width, height) {
         const entities = this.#entitySpaces.flatMap(entitySpace => entitySpace.search(world, x, y, width, height));
         MapUtil.sync(this.#entities, new Map(entities.map(entity => [entity.id, entity])));
+        MapUtil.sync(this.#tiles, new Map(entities.map(entity => [JSON.stringify([entity.x, entity.y]), entity])));
     }
 }
